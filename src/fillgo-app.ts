@@ -5,6 +5,7 @@ import { Icons } from "./shared/icons";
 
 import "./components/fg-list-root/fg-list-root";
 import "./components/fg-list-item/fg-list-item";
+import "./components/fg-input-parameter/fg-input-parameter";
 
 import { setBasePath } from "@shoelace-style/shoelace/dist/utilities/base-path.js";
 import "@shoelace-style/shoelace/dist/themes/light.css";
@@ -33,6 +34,9 @@ export class FillGoApp extends LitElement {
           <sl-button-group label="Alignment">
             <sl-tooltip content="新規追加">
               <sl-button size="medium">${Icons.plus}</sl-button>
+            </sl-tooltip>
+            <sl-tooltip content="フィルタ">
+              <sl-button size="medium">${Icons.funnel}</sl-button>
             </sl-tooltip>
             <sl-tooltip content="Upload">
               <sl-button size="medium">${Icons.upload}</sl-button>
@@ -66,12 +70,14 @@ export class FillGoApp extends LitElement {
         <div class="header">Input Parameter</div>
         <div class="menu">
           <sl-button-group label="Alignment">
-            <sl-tooltip content="クリア">
-              <sl-button size="medium">${Icons.clearAll}</sl-button>
+            <sl-tooltip content="初期化">
+              <sl-button size="medium">${Icons.undo}</sl-button>
             </sl-tooltip>
           </sl-button-group>
         </div>
-        <div class="contents"></div>
+        <div class="contents">
+          <fg-input-parameter> </fg-input-parameter>
+        </div>
       </div>
       <div class="laytou-grid">
         <div class="header">Output Text</div>
@@ -81,7 +87,7 @@ export class FillGoApp extends LitElement {
               <sl-button size="medium">${Icons.copy}</sl-button>
             </sl-tooltip>
             <sl-tooltip content="保存">
-              <sl-button size="medium">${Icons.writing}</sl-button>
+              <sl-button size="medium">${Icons.save}</sl-button>
             </sl-tooltip>
             <sl-tooltip content="履歴">
               <sl-button size="medium">${Icons.history}</sl-button>

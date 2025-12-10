@@ -12,6 +12,9 @@
   &:hover {
     border-color: var(--sl-color-primary-500);
   }
+  &.isSelected {
+    border-color: var(--sl-color-primary-500);
+  }
 
   .text {
     cursor: pointer;
