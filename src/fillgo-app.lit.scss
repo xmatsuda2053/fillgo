@@ -97,10 +97,15 @@
   }
 
   #template-editor {
-    --width: 600px;
+    --width: 60%;
 
     .spacing-bottom {
       margin-bottom: var(--sl-spacing-x-small);
+    }
+
+    &::part(body) {
+      padding-top: 0;
+      padding-bottom: 0;
     }
 
     sl-button {

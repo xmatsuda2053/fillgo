@@ -11,3 +11,8 @@ export function formatDate(date?: Date): String {
 
   return `${yyyy}/${MM}/${dd} ${HH}:${mm}:${ss}`;
 }
+
+export function getParams(content: string): string[] {
+  const pattern: RegExp = /{[^}]+}/g;
+  return [...new Set(content.match(pattern) || [])];
+}

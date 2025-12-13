@@ -1,4 +1,5 @@
 import Dexie, { Table } from "dexie";
+import { getParams } from "./utils";
 
 export interface Template {
   id?: number;
@@ -20,14 +21,10 @@ export class FillGoDB extends Dexie {
   }
 
   async insertItem(t: Template) {
-    t.params = this._getParams(t.content);
+    t.params = getParams(t.content);
     t.createdAt = new Date();
     t.updatedAt = new Date();
     return await db.templates.add(t);
-  }
-  private _getParams(content: string): string[] {
-    const pattern: RegExp = /{[^}]+}/g;
-    return [...new Set(content.match(pattern) || [])];
   }
 
   async selectItemById(id?: number) {

@@ -3,7 +3,7 @@ import { customElement, state, query } from "lit/decorators.js";
 
 import { Icons } from "./shared/icons";
 import { db, Template } from "./service/db";
-import { formatDate } from "./service/utils";
+import { formatDate, getParams } from "./service/utils";
 
 import "./components/fg-list-root/fg-list-root";
 import "./components/fg-list-item/fg-list-item";
@@ -36,6 +36,7 @@ export class FillGoApp extends LitElement {
   @query("#template-editor") editor!: SlDialog;
   @query("#template-title") inputTitle!: SlInput;
   @query("#template-content") inputContent!: SlTextarea;
+  @query("#template-param") inputParam!: SlInput;
 
   constructor() {
     super();
@@ -133,7 +134,14 @@ export class FillGoApp extends LitElement {
           size="small"
           rows="10"
           resize="none"
+          @input=${this._extractionParam}
         ></sl-textarea>
+        <sl-input
+          id="template-param"
+          label="Param"
+          size="small"
+          disabled
+        ></sl-input>
         <sl-button slot="footer" variant="primary" @click=${this._save}>
           ${Icons.save}
         </sl-button>
@@ -148,6 +156,10 @@ export class FillGoApp extends LitElement {
   private _initEditor() {
     this.inputTitle.value = "";
     this.inputContent.value = "";
+    this.inputParam.value = "";
+  }
+  private _extractionParam() {
+    this.inputParam.value = getParams(this.inputContent.value).join(" ");
   }
   private _handleRequestClose() {
     (document.activeElement as HTMLElement)?.blur();
