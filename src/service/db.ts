@@ -20,15 +20,32 @@ export class FillGoDB extends Dexie {
     });
   }
 
-  async insertItem(t: Template): Promise<Number> {
+  async insertItem(t: Template): Promise<number> {
     t.params = getParams(t.content);
     t.createdAt = new Date();
     t.updatedAt = new Date();
     return await db.templates.add(t);
   }
 
-  async selectItemById(id?: number) {
+  async selectItems(): Promise<Template[]> {
+    return await db.templates.toArray();
+  }
+
+  async selectItemById(id: number): Promise<Template | undefined> {
     return await db.templates.get(id);
+  }
+
+  async updateItem(id: number, t: Template) {
+    await db.templates.update(id, {
+      title: t.title,
+      content: t.content,
+      params: getParams(t.content),
+      updatedAt: new Date(),
+    });
+  }
+
+  async deleteItem(id: number) {
+    await db.templates.delete(id);
   }
 }
 export const db = new FillGoDB();

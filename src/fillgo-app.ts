@@ -17,6 +17,7 @@ import "@shoelace-style/shoelace/dist/components/button-group/button-group.js";
 import "@shoelace-style/shoelace/dist/components/dialog/dialog.js";
 import "@shoelace-style/shoelace/dist/components/input/input.js";
 import "@shoelace-style/shoelace/dist/components/textarea/textarea.js";
+import "@shoelace-style/shoelace/dist/components/alert/alert.js";
 
 import type SlDialog from "@shoelace-style/shoelace/dist/components/dialog/dialog.js";
 import type SlInput from "@shoelace-style/shoelace/dist/components/input/input.js";
@@ -32,12 +33,14 @@ export class FillGoApp extends LitElement {
   `;
 
   @state() private _templates: Template[] = [];
-  @state() private _selectedId: Number = 0;
+  @state() private _selectedId: number = 0;
 
   @query("#template-editor") editor!: SlDialog;
   @query("#template-title") inputTitle!: SlInput;
   @query("#template-content") inputContent!: SlTextarea;
   @query("#template-param") inputParam!: SlInput;
+  @query("#delete-dialog") deleteDialog!: SlDialog;
+  @query("#delete-item-title") deleteItemTitle!: HTMLSpanElement;
 
   constructor() {
     super();
@@ -45,7 +48,7 @@ export class FillGoApp extends LitElement {
   }
 
   private async _refresh() {
-    this._templates = await db.templates.toArray();
+    this._templates = await db.selectItems();
   }
 
   render() {
@@ -74,7 +77,11 @@ export class FillGoApp extends LitElement {
           </sl-button-group>
         </div>
         <div class="contents">
-          <fg-list-root @selected-item=${this._selectedListItem}>
+          <fg-list-root
+            @selected-item=${this._selectedListItem}
+            @edit-item=${this._editListItem}
+            @delete-item=${this._deleteListItem}
+          >
             ${this._templates.map((f) => {
               return html`<fg-list-item
                 itemId="${f.id}"
@@ -117,50 +124,78 @@ export class FillGoApp extends LitElement {
         </div>
         <div class="contents"></div>
       </div>
-      <sl-dialog
-        label="Template Editor"
-        id="template-editor"
-        @sl-request-close=${this._handleRequestClose}
-      >
-        <sl-input
-          id="template-title"
-          class="spacing-bottom"
-          label="Title"
-          placeholder="e.g. 業務連絡"
-          size="small"
-          clearable
-        ></sl-input>
-        <sl-textarea
-          id="template-content"
-          class="spacing-bottom"
-          label="Contents"
-          placeholder="e.g. {所属} の {氏名} さんから次の通り連絡がありました。"
-          size="small"
-          rows="10"
-          resize="none"
-          @input=${this._extractionParam}
-        ></sl-textarea>
-        <sl-input
-          id="template-param"
-          label="Param"
-          size="small"
-          disabled
-        ></sl-input>
-        <sl-button slot="footer" variant="primary" @click=${this._save}>
-          ${Icons.save}
-        </sl-button>
-      </sl-dialog>
+      ${this.renderTemplateEditor()} ${this.renderDeleteDialog()}
     </div>`;
+  }
+  renderTemplateEditor() {
+    return html` <sl-dialog
+      label="Template Editor"
+      id="template-editor"
+      @sl-request-close=${this._handleRequestClose}
+    >
+      <sl-input
+        id="template-title"
+        class="spacing-bottom"
+        label="Title"
+        placeholder="e.g. 業務連絡"
+        size="small"
+        clearable
+      ></sl-input>
+      <sl-textarea
+        id="template-content"
+        class="spacing-bottom"
+        label="Contents"
+        placeholder="e.g. {所属} の {氏名} さんから次の通り連絡がありました。"
+        size="small"
+        rows="10"
+        resize="none"
+        @input=${this._extractionParam}
+      ></sl-textarea>
+      <sl-input
+        id="template-param"
+        label="Param"
+        size="small"
+        disabled
+      ></sl-input>
+      <sl-button slot="footer" variant="primary" @click=${this._save}>
+        ${Icons.save}
+      </sl-button>
+    </sl-dialog>`;
+  }
+  renderDeleteDialog() {
+    return html`<sl-dialog
+      label="Delete"
+      id="delete-dialog"
+      @sl-request-close=${this._handleRequestClose}
+    >
+      <div class="message">
+        ${Icons.exclamationOctagon}
+        <span id="delete-item-title"></span> を削除します。よろしいですか？
+      </div>
+      <sl-button slot="footer" variant="danger" @click=${this._delete}>
+        ${Icons.trash}
+      </sl-button>
+    </sl-dialog>`;
   }
 
   private _openEditor() {
+    this._selectedId = 0;
     this._initEditor();
     this.editor.show();
   }
-  private _initEditor() {
+  private async _initEditor(itemId: number = 0) {
     this.inputTitle.value = "";
     this.inputContent.value = "";
     this.inputParam.value = "";
+
+    if (itemId !== 0) {
+      const t: Template | undefined = await db.selectItemById(itemId);
+      if (t) {
+        this.inputTitle.value = t.title;
+        this.inputContent.value = t.content;
+        this._extractionParam();
+      }
+    }
   }
   private _extractionParam() {
     this.inputParam.value = getParams(this.inputContent.value).join(" ");
@@ -169,12 +204,16 @@ export class FillGoApp extends LitElement {
     (document.activeElement as HTMLElement)?.blur();
   }
   private async _save() {
-    const newItem: Template = {
+    const itemData: Template = {
       title: this.inputTitle.value,
       content: this.inputContent.value,
     };
 
-    this._selectedId = await db.insertItem(newItem);
+    if (this._selectedId === 0) {
+      this._selectedId = await db.insertItem(itemData);
+    } else {
+      await db.updateItem(this._selectedId, itemData);
+    }
 
     this._handleRequestClose();
     this.editor.hide();
@@ -185,5 +224,31 @@ export class FillGoApp extends LitElement {
     if (e.detail) {
       this._selectedId = e.detail.itemId;
     }
+  }
+  private _editListItem(e: CustomEvent) {
+    if (e.detail) {
+      this._selectedId = e.detail.itemId;
+      this._initEditor(this._selectedId);
+      this.editor.show();
+    }
+  }
+  private async _deleteListItem(e: CustomEvent) {
+    if (e.detail) {
+      this._selectedId = e.detail.itemId;
+      const t: Template | undefined = await db.selectItemById(this._selectedId);
+      if (t) {
+        this.deleteItemTitle.innerText = t.title;
+      }
+      this.deleteDialog.show();
+    }
+  }
+  private _delete() {
+    db.deleteItem(this._selectedId);
+
+    this._handleRequestClose();
+    this.deleteDialog.hide();
+
+    this._selectedId = 0;
+    this._refresh();
   }
 }

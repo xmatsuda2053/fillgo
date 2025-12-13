@@ -7,6 +7,17 @@
   color: var(--sl-color-neutral-900);
 }
 
+sl-button {
+  svg {
+    display: block;
+  }
+  &::part(base) {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+}
+
 .layout-grid-root {
   display: grid;
   grid-template-columns: 300px 1fr 1fr;
@@ -40,21 +51,6 @@
       display: flex;
       justify-content: space-between;
       align-items: center;
-
-      sl-button-group {
-        sl-button {
-          svg {
-            display: block;
-            width: var(--sl-font-size-medium);
-            height: var(--sl-font-size-medium);
-          }
-          &::part(base) {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-          }
-        }
-      }
     }
 
     .contents {
@@ -107,15 +103,17 @@
       padding-top: 0;
       padding-bottom: 0;
     }
+  }
 
-    sl-button {
+  #delete-dialog {
+    .message {
+      display: flex;
+      align-items: center;
+
       svg {
         display: block;
-      }
-      &::part(base) {
-        display: flex;
-        align-items: center;
-        justify-content: center;
+        margin-right: var(--sl-spacing-x-small);
+        color: var(--sl-color-danger-500);
       }
     }
   }

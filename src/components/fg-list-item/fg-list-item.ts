@@ -69,10 +69,20 @@ export class FgListItem extends LitElement {
   }
 
   private _edit() {
-    console.log("edit");
+    const event = new CustomEvent("edit-item", {
+      detail: { itemId: this.itemId },
+      bubbles: true,
+      composed: true,
+    });
+    this.dispatchEvent(event);
   }
 
   private _delete() {
-    console.log("delete");
+    const event = new CustomEvent("delete-item", {
+      detail: { itemId: this.itemId },
+      bubbles: true,
+      composed: true,
+    });
+    this.dispatchEvent(event);
   }
 }
