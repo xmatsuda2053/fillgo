@@ -32,6 +32,7 @@ export class FillGoApp extends LitElement {
   `;
 
   @state() private _templates: Template[] = [];
+  @state() private _selectedId: Number = 0;
 
   @query("#template-editor") editor!: SlDialog;
   @query("#template-title") inputTitle!: SlInput;
@@ -73,9 +74,12 @@ export class FillGoApp extends LitElement {
           </sl-button-group>
         </div>
         <div class="contents">
-          <fg-list-root>
+          <fg-list-root @selected-item=${this._selectedListItem}>
             ${this._templates.map((f) => {
-              return html`<fg-list-item itemId="${f.id}">
+              return html`<fg-list-item
+                itemId="${f.id}"
+                .isSelect=${f.id === this._selectedId}
+              >
                 <span slot="title">${f.title}</span>
                 <span slot="updateAt">${formatDate(f.updatedAt)}</span>
               </fg-list-item>`;
@@ -164,16 +168,22 @@ export class FillGoApp extends LitElement {
   private _handleRequestClose() {
     (document.activeElement as HTMLElement)?.blur();
   }
-  private _save() {
+  private async _save() {
     const newItem: Template = {
       title: this.inputTitle.value,
       content: this.inputContent.value,
     };
 
-    db.insertItem(newItem);
+    this._selectedId = await db.insertItem(newItem);
 
     this._handleRequestClose();
     this.editor.hide();
     this._refresh();
+  }
+
+  private _selectedListItem(e: CustomEvent) {
+    if (e.detail) {
+      this._selectedId = e.detail.itemId;
+    }
   }
 }

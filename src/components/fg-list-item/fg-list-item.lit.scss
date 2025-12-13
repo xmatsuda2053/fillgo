@@ -12,8 +12,8 @@
   &:hover {
     border-color: var(--sl-color-primary-500);
   }
-  &.isSelected {
-    border-color: var(--sl-color-primary-500);
+  &.is-selected {
+    background-color: var(--sl-color-neutral-100);
   }
 
   .text {

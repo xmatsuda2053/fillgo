@@ -11,6 +11,10 @@ import "@shoelace-style/shoelace/dist/components/button-group/button-group.js";
 
 import styles from "./fg-list-root.lit.scss?inline";
 
+interface SelectableElement extends EventTarget {
+  isSelected: boolean;
+}
+
 setBasePath("/");
 @customElement("fg-list-root")
 export class FgListRoot extends LitElement {

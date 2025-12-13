@@ -20,7 +20,7 @@ export class FillGoDB extends Dexie {
     });
   }
 
-  async insertItem(t: Template) {
+  async insertItem(t: Template): Promise<Number> {
     t.params = getParams(t.content);
     t.createdAt = new Date();
     t.updatedAt = new Date();

@@ -1,5 +1,6 @@
 import { LitElement, html, css, unsafeCSS } from "lit";
 import { customElement, state, property, query } from "lit/decorators.js";
+import { classMap } from "lit/directives/class-map.js";
 
 import { Icons } from "../../shared/icons";
 import { Template } from "../../service/db";
@@ -23,13 +24,19 @@ export class FgListItem extends LitElement {
   `;
 
   @property({ type: Number, hasChanged: () => true }) itemId?: Number;
+  @property({ type: Boolean }) isSelect?: Boolean;
 
   constructor() {
     super();
   }
 
   render() {
-    return html` <div class="list-item">
+    return html` <div
+      class=${classMap({
+        "list-item": true,
+        "is-selected": this.isSelect === true,
+      })}
+    >
       <div class="text title-area" @click=${this._selected}>
         <slot name="title" class="title"></slot>
       </div>
@@ -53,7 +60,12 @@ export class FgListItem extends LitElement {
   }
 
   private _selected() {
-    console.log("selected");
+    const event = new CustomEvent("selected-item", {
+      detail: { itemId: this.itemId },
+      bubbles: true,
+      composed: true,
+    });
+    this.dispatchEvent(event);
   }
 
   private _edit() {
