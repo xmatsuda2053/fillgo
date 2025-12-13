@@ -24,7 +24,7 @@ export class FillGoDB extends Dexie {
     return await db.templates.add(t);
   }
 
-  async selectItem(id?: number) {
+  async selectItemById(id?: number) {
     return await db.templates.get(id);
   }
 

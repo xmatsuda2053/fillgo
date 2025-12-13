@@ -29,7 +29,7 @@ export class FillGoApp extends LitElement {
   render() {
     return html` <div class="layout-grid-root">
       <div class="laytou-grid">
-        <div class="header">Select Template</div>
+        <div class="header">FillGo</div>
         <div class="menu">
           <sl-button-group label="Alignment">
             <sl-tooltip content="新規追加">
@@ -67,7 +67,7 @@ export class FillGoApp extends LitElement {
         </div>
       </div>
       <div class="laytou-grid">
-        <div class="header">Input Parameter</div>
+        <div class="header">arguments</div>
         <div class="menu">
           <sl-button-group label="Alignment">
             <sl-tooltip content="初期化">
@@ -80,7 +80,7 @@ export class FillGoApp extends LitElement {
         </div>
       </div>
       <div class="laytou-grid">
-        <div class="header">Output Text</div>
+        <div class="header">result</div>
         <div class="menu">
           <sl-button-group label="Alignment">
             <sl-tooltip content="コピー">

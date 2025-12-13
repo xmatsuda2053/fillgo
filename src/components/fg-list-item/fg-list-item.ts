@@ -42,7 +42,9 @@ export class FgListItem extends LitElement {
       </div>
       <div class="button-area">
         <sl-tooltip content="Menu">
-          <sl-button size="small">${Icons.dots}</sl-button>
+          <sl-button size="small" @click=${this._openMenu}>
+            ${Icons.dots}
+          </sl-button>
         </sl-tooltip>
       </div>
     </div>`;
@@ -50,5 +52,14 @@ export class FgListItem extends LitElement {
 
   private _selected() {
     console.log("selected");
+  }
+
+  private _openMenu(e: Event) {
+    const event = new CustomEvent("click-menu", {
+      detail: { target: e.target },
+      bubbles: true,
+      composed: true,
+    });
+    this.dispatchEvent(event);
   }
 }
