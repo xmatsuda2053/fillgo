@@ -22,6 +22,7 @@ import "@shoelace-style/shoelace/dist/components/alert/alert.js";
 import type SlDialog from "@shoelace-style/shoelace/dist/components/dialog/dialog.js";
 import type SlInput from "@shoelace-style/shoelace/dist/components/input/input.js";
 import type SlTextarea from "@shoelace-style/shoelace/dist/components/textarea/textarea.js";
+import { FgInputParameter } from "./components/fg-input-parameter/fg-input-parameter";
 
 import styles from "./fillgo-app.lit.scss?inline";
 
@@ -41,6 +42,7 @@ export class FillGoApp extends LitElement {
   @query("#template-param") inputParam!: SlInput;
   @query("#delete-dialog") deleteDialog!: SlDialog;
   @query("#delete-item-title") deleteItemTitle!: HTMLSpanElement;
+  @query("fg-input-parameter") inputParameter!: FgInputParameter;
 
   constructor() {
     super();
@@ -49,6 +51,7 @@ export class FillGoApp extends LitElement {
 
   private async _refresh() {
     this._templates = await db.selectItems();
+    this.inputParameter.refresh();
   }
 
   render() {
@@ -95,20 +98,22 @@ export class FillGoApp extends LitElement {
         </div>
       </div>
       <div class="laytou-grid">
-        <div class="header">arguments</div>
+        <div class="header">Parameter</div>
         <div class="menu">
           <sl-button-group label="Alignment">
             <sl-tooltip content="初期化">
-              <sl-button size="medium">${Icons.undo}</sl-button>
+              <sl-button size="medium" @click=${this._clearParameter}>
+                ${Icons.undo}
+              </sl-button>
             </sl-tooltip>
           </sl-button-group>
         </div>
         <div class="contents">
-          <fg-input-parameter> </fg-input-parameter>
+          <fg-input-parameter .itemId=${this._selectedId}></fg-input-parameter>
         </div>
       </div>
       <div class="laytou-grid">
-        <div class="header">result</div>
+        <div class="header">Result</div>
         <div class="menu">
           <sl-button-group label="Alignment">
             <sl-tooltip content="コピー">
@@ -250,5 +255,9 @@ export class FillGoApp extends LitElement {
 
     this._selectedId = 0;
     this._refresh();
+  }
+
+  private _clearParameter() {
+    this.inputParameter.clear();
   }
 }

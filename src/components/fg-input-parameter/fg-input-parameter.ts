@@ -1,13 +1,16 @@
-import { LitElement, html, css, unsafeCSS } from "lit";
-import { customElement, state, query } from "lit/decorators.js";
+import { LitElement, html, css, unsafeCSS, PropertyValues } from "lit";
+import { customElement, property, state, queryAll } from "lit/decorators.js";
 
 import { Icons } from "../../shared/icons";
+import { db, Template } from "../../service/db";
 
 import { setBasePath } from "@shoelace-style/shoelace/dist/utilities/base-path.js";
 import "@shoelace-style/shoelace/dist/themes/light.css";
 import "@shoelace-style/shoelace/dist/components/tooltip/tooltip.js";
+import "@shoelace-style/shoelace/dist/components/textarea/textarea.js";
 
 import styles from "./fg-input-parameter.lit.scss?inline";
+import SlTextarea from "@shoelace-style/shoelace/dist/components/textarea/textarea.js";
 
 setBasePath("/");
 @customElement("fg-input-parameter")
@@ -16,11 +19,45 @@ export class FgInputParameter extends LitElement {
     ${unsafeCSS(styles)}
   `;
 
+  @property({ type: Number, hasChanged: () => true }) itemId?: number = 0;
+  @state() template?: Template = undefined;
+  @queryAll("sl-textarea") textareas!: SlTextarea[];
+
   constructor() {
     super();
   }
 
+  async willUpdate(changedProperties: Map<string, any>) {
+    if (
+      changedProperties.has("itemId") &&
+      this.itemId !== undefined &&
+      this.itemId !== 0
+    ) {
+      this.refresh();
+    }
+  }
+
+  async refresh() {
+    if (this.itemId !== undefined && this.itemId !== 0) {
+      this.template = await db.selectItemById(this.itemId);
+    }
+  }
+
   render() {
-    return html` <div class="input-parameter"></div>`;
+    return html` <div class="input-parameter">
+      ${this.template?.params?.map(
+        (f) =>
+          html`<sl-textarea
+            placeholder=${f}
+            size="small"
+            rows="1"
+            resize="auto"
+          ></sl-textarea>`
+      )}
+    </div>`;
+  }
+
+  async clear() {
+    this.textareas.forEach((f) => (f.value = ""));
   }
 }
