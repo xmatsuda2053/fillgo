@@ -9,6 +9,9 @@ import "@shoelace-style/shoelace/dist/themes/light.css";
 import "@shoelace-style/shoelace/dist/components/tooltip/tooltip.js";
 import "@shoelace-style/shoelace/dist/components/button/button.js";
 import "@shoelace-style/shoelace/dist/components/button-group/button-group.js";
+import "@shoelace-style/shoelace/dist/components/dropdown/dropdown.js";
+import "@shoelace-style/shoelace/dist/components/menu/menu.js";
+import "@shoelace-style/shoelace/dist/components/menu-item/menu-item.js";
 
 import styles from "./fg-list-item.lit.scss?inline";
 
@@ -19,17 +22,10 @@ export class FgListItem extends LitElement {
     ${unsafeCSS(styles)}
   `;
 
-  @property({ type: Object, hasChanged: () => true }) template?: Template;
-  @state() private _internalTemplate?: Template;
+  @property({ type: Number, hasChanged: () => true }) itemId?: Number;
 
   constructor() {
     super();
-  }
-
-  willUpdate(changedProperties: Map<string, any>) {
-    if (changedProperties.has("template") && this.template !== undefined) {
-      this._internalTemplate = { ...this.template };
-    }
   }
 
   render() {
@@ -41,11 +37,17 @@ export class FgListItem extends LitElement {
         <slot name="updateAt" class="updateAt"></slot>
       </div>
       <div class="button-area">
-        <sl-tooltip content="Menu">
-          <sl-button size="small" @click=${this._openMenu}>
-            ${Icons.dots}
-          </sl-button>
-        </sl-tooltip>
+        <sl-dropdown>
+          <sl-button size="small" slot="trigger"> ${Icons.dots} </sl-button>
+          <sl-menu id="context-menu">
+            <sl-menu-item value="edit" @click=${this._edit}>
+              編集
+            </sl-menu-item>
+            <sl-menu-item value="delete" class="danger" @click=${this._delete}>
+              削除 ${Icons.trash}
+            </sl-menu-item>
+          </sl-menu>
+        </sl-dropdown>
       </div>
     </div>`;
   }
@@ -54,12 +56,11 @@ export class FgListItem extends LitElement {
     console.log("selected");
   }
 
-  private _openMenu(e: Event) {
-    const event = new CustomEvent("click-menu", {
-      detail: { target: e.target },
-      bubbles: true,
-      composed: true,
-    });
-    this.dispatchEvent(event);
+  private _edit() {
+    console.log("edit");
+  }
+
+  private _delete() {
+    console.log("delete");
   }
 }

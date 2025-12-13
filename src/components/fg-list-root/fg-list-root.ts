@@ -23,12 +23,10 @@ export class FgListRoot extends LitElement {
   }
 
   render() {
-    return html` <div class="list-root" @click-menu=${this._openMenu}>
-      <slot></slot>
-    </div>`;
-  }
-
-  private _openMenu(e: CustomEvent) {
-    console.log(e.target);
+    return html`
+      <div class="list-root">
+        <slot></slot>
+      </div>
+    `;
   }
 }

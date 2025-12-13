@@ -61,5 +61,24 @@
         border: none;
       }
     }
+
+    sl-menu-item {
+      svg {
+        display: block;
+        width: var(--sl-font-size-medium);
+        height: var(--sl-font-size-medium);
+        margin-left: var(--sl-spacing-2x-small);
+      }
+      &::part(label) {
+        display: flex;
+        align-items: center;
+        justify-content: left;
+      }
+      &.danger {
+        &::part(label) {
+          color: var(--sl-color-danger-500);
+        }
+      }
+    }
   }
 }

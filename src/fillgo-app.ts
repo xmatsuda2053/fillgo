@@ -51,15 +51,15 @@ export class FillGoApp extends LitElement {
         </div>
         <div class="contents">
           <fg-list-root>
-            <fg-list-item>
+            <fg-list-item itemId="1">
               <span slot="title">テスト用タイトルテスト用タイトルテスト用</span>
               <span slot="updateAt">2025/12/08 22:28</span>
             </fg-list-item>
-            <fg-list-item>
+            <fg-list-item itemId="2">
               <span slot="title">test2</span>
               <span slot="updateAt">2025/12/08 22:28</span></fg-list-item
             >
-            <fg-list-item>
+            <fg-list-item itemId="3">
               <span slot="title">test3</span>
               <span slot="updateAt">2025/12/08 22:28</span></fg-list-item
             >
