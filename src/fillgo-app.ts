@@ -2,6 +2,8 @@ import { LitElement, html, css, unsafeCSS } from "lit";
 import { customElement, state, query } from "lit/decorators.js";
 
 import { Icons } from "./shared/icons";
+import { db, Template } from "./service/db";
+import { formatDate } from "./service/utils";
 
 import "./components/fg-list-root/fg-list-root";
 import "./components/fg-list-item/fg-list-item";
@@ -12,6 +14,13 @@ import "@shoelace-style/shoelace/dist/themes/light.css";
 import "@shoelace-style/shoelace/dist/components/tooltip/tooltip.js";
 import "@shoelace-style/shoelace/dist/components/button/button.js";
 import "@shoelace-style/shoelace/dist/components/button-group/button-group.js";
+import "@shoelace-style/shoelace/dist/components/dialog/dialog.js";
+import "@shoelace-style/shoelace/dist/components/input/input.js";
+import "@shoelace-style/shoelace/dist/components/textarea/textarea.js";
+
+import type SlDialog from "@shoelace-style/shoelace/dist/components/dialog/dialog.js";
+import type SlInput from "@shoelace-style/shoelace/dist/components/input/input.js";
+import type SlTextarea from "@shoelace-style/shoelace/dist/components/textarea/textarea.js";
 
 import styles from "./fillgo-app.lit.scss?inline";
 
@@ -22,8 +31,19 @@ export class FillGoApp extends LitElement {
     ${unsafeCSS(styles)}
   `;
 
+  @state() private _templates: Template[] = [];
+
+  @query("#template-editor") editor!: SlDialog;
+  @query("#template-title") inputTitle!: SlInput;
+  @query("#template-content") inputContent!: SlTextarea;
+
   constructor() {
     super();
+    this._refresh();
+  }
+
+  private async _refresh() {
+    this._templates = await db.templates.toArray();
   }
 
   render() {
@@ -33,7 +53,9 @@ export class FillGoApp extends LitElement {
         <div class="menu">
           <sl-button-group label="Alignment">
             <sl-tooltip content="新規追加">
-              <sl-button size="medium">${Icons.plus}</sl-button>
+              <sl-button size="medium" @click=${this._openEditor}>
+                ${Icons.plus}
+              </sl-button>
             </sl-tooltip>
             <sl-tooltip content="フィルタ">
               <sl-button size="medium">${Icons.funnel}</sl-button>
@@ -51,18 +73,12 @@ export class FillGoApp extends LitElement {
         </div>
         <div class="contents">
           <fg-list-root>
-            <fg-list-item itemId="1">
-              <span slot="title">テスト用タイトルテスト用タイトルテスト用</span>
-              <span slot="updateAt">2025/12/08 22:28</span>
-            </fg-list-item>
-            <fg-list-item itemId="2">
-              <span slot="title">test2</span>
-              <span slot="updateAt">2025/12/08 22:28</span></fg-list-item
-            >
-            <fg-list-item itemId="3">
-              <span slot="title">test3</span>
-              <span slot="updateAt">2025/12/08 22:28</span></fg-list-item
-            >
+            ${this._templates.map((f) => {
+              return html`<fg-list-item itemId="${f.id}">
+                <span slot="title">${f.title}</span>
+                <span slot="updateAt">${formatDate(f.updatedAt)}</span>
+              </fg-list-item>`;
+            })}
           </fg-list-root>
         </div>
       </div>
@@ -96,6 +112,56 @@ export class FillGoApp extends LitElement {
         </div>
         <div class="contents"></div>
       </div>
+      <sl-dialog
+        label="Template Editor"
+        id="template-editor"
+        @sl-request-close=${this._handleRequestClose}
+      >
+        <sl-input
+          id="template-title"
+          class="spacing-bottom"
+          label="Title"
+          placeholder="e.g. 業務連絡"
+          size="small"
+          clearable
+        ></sl-input>
+        <sl-textarea
+          id="template-content"
+          class="spacing-bottom"
+          label="Contents"
+          placeholder="e.g. {所属} の {氏名} さんから次の通り連絡がありました。"
+          size="small"
+          rows="10"
+          resize="none"
+        ></sl-textarea>
+        <sl-button slot="footer" variant="primary" @click=${this._save}>
+          ${Icons.save}
+        </sl-button>
+      </sl-dialog>
     </div>`;
+  }
+
+  private _openEditor() {
+    this._initEditor();
+    this.editor.show();
+  }
+  private _initEditor() {
+    this.inputTitle.value = "";
+    this.inputContent.value = "";
+  }
+  private _handleRequestClose() {
+    (document.activeElement as HTMLElement)?.blur();
+  }
+  private _save() {
+    const newItem: Template = {
+      title: this.inputTitle.value,
+      content: this.inputContent.value,
+    };
+
+    db.insertItem(newItem);
+
+    this._handleRequestClose();
+    this.editor.hide();
+    this._refresh();
   }
 }

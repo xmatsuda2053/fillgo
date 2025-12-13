@@ -10,13 +10,14 @@
 .layout-grid-root {
   display: grid;
   grid-template-columns: 300px 1fr 1fr;
-  height: 100%;
   gap: 1px;
   background-color: var(--sl-color-neutral-200);
+  height: 100%;
 
   .laytou-grid {
+    height: 100%;
+    min-height: 0;
     background-color: var(--sl-color-neutral-0);
-    overflow-y: auto;
     padding: var(--sl-spacing-small);
     padding-top: none;
     display: flex;
@@ -57,8 +58,30 @@
     }
 
     .contents {
-      height: 100%;
+      flex-grow: 1;
+      flex-shrink: 1;
       width: 100%;
+      min-height: 0;
+      overflow-y: scroll;
+    }
+  }
+
+  #template-editor {
+    --width: 600px;
+
+    .spacing-bottom {
+      margin-bottom: var(--sl-spacing-x-small);
+    }
+
+    sl-button {
+      svg {
+        display: block;
+      }
+      &::part(base) {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      }
     }
   }
 }

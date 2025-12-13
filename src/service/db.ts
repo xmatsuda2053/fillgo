@@ -5,8 +5,8 @@ export interface Template {
   title: string;
   content: string;
   params?: string[];
-  createdAt: Date;
-  updatedAt: Date;
+  createdAt?: Date;
+  updatedAt?: Date;
 }
 
 export class FillGoDB extends Dexie {
@@ -21,16 +21,17 @@ export class FillGoDB extends Dexie {
 
   async insertItem(t: Template) {
     t.params = this._getParams(t.content);
+    t.createdAt = new Date();
+    t.updatedAt = new Date();
     return await db.templates.add(t);
+  }
+  private _getParams(content: string): string[] {
+    const pattern: RegExp = /{[^}]+}/g;
+    return [...new Set(content.match(pattern) || [])];
   }
 
   async selectItemById(id?: number) {
     return await db.templates.get(id);
-  }
-
-  private _getParams(content: string): string[] {
-    const pattern: RegExp = /{[^}]+}/g;
-    return [...new Set(content.match(pattern) || [])];
   }
 }
 export const db = new FillGoDB();
