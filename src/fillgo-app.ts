@@ -8,6 +8,7 @@ import { formatDate, getParams } from "./service/utils";
 import "./components/fg-list-root/fg-list-root";
 import "./components/fg-list-item/fg-list-item";
 import "./components/fg-input-parameter/fg-input-parameter";
+import "./components/fg-output-result/fg-output-result";
 
 import { setBasePath } from "@shoelace-style/shoelace/dist/utilities/base-path.js";
 import "@shoelace-style/shoelace/dist/themes/light.css";
@@ -23,6 +24,7 @@ import type SlDialog from "@shoelace-style/shoelace/dist/components/dialog/dialo
 import type SlInput from "@shoelace-style/shoelace/dist/components/input/input.js";
 import type SlTextarea from "@shoelace-style/shoelace/dist/components/textarea/textarea.js";
 import { FgInputParameter } from "./components/fg-input-parameter/fg-input-parameter";
+import { FgOutputResult } from "./components/fg-output-result/fg-output-result";
 
 import styles from "./fillgo-app.lit.scss?inline";
 
@@ -43,6 +45,7 @@ export class FillGoApp extends LitElement {
   @query("#delete-dialog") deleteDialog!: SlDialog;
   @query("#delete-item-title") deleteItemTitle!: HTMLSpanElement;
   @query("fg-input-parameter") inputParameter!: FgInputParameter;
+  @query("fg-output-result") outputResult!: FgOutputResult;
 
   constructor() {
     super();
@@ -127,7 +130,9 @@ export class FillGoApp extends LitElement {
             </sl-tooltip>
           </sl-button-group>
         </div>
-        <div class="contents"></div>
+        <div class="contents">
+          <fg-output-result .itemId=${this._selectedId}></fg-output-result>
+        </div>
       </div>
       ${this.renderTemplateEditor()} ${this.renderDeleteDialog()}
     </div>`;
