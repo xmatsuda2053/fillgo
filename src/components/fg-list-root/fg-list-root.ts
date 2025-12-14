@@ -1,21 +1,7 @@
 import { LitElement, html, css, unsafeCSS } from "lit";
-import { customElement, state, query } from "lit/decorators.js";
-
-import { Icons } from "../../shared/icons";
-
-import { setBasePath } from "@shoelace-style/shoelace/dist/utilities/base-path.js";
-import "@shoelace-style/shoelace/dist/themes/light.css";
-import "@shoelace-style/shoelace/dist/components/tooltip/tooltip.js";
-import "@shoelace-style/shoelace/dist/components/button/button.js";
-import "@shoelace-style/shoelace/dist/components/button-group/button-group.js";
-
+import { customElement } from "lit/decorators.js";
 import styles from "./fg-list-root.lit.scss?inline";
 
-interface SelectableElement extends EventTarget {
-  isSelected: boolean;
-}
-
-setBasePath("/");
 @customElement("fg-list-root")
 export class FgListRoot extends LitElement {
   static styles = css`

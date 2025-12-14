@@ -33,7 +33,7 @@ sl-button {
     align-items: center;
     background-color: var(--sl-color-neutral-800);
 
-    sl-button {
+    #menu-button {
       &::part(base) {
         color: var(--sl-color-neutral-0);
       }

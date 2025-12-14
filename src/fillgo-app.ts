@@ -19,11 +19,14 @@ import "@shoelace-style/shoelace/dist/components/button-group/button-group.js";
 import "@shoelace-style/shoelace/dist/components/dialog/dialog.js";
 import "@shoelace-style/shoelace/dist/components/input/input.js";
 import "@shoelace-style/shoelace/dist/components/textarea/textarea.js";
-import "@shoelace-style/shoelace/dist/components/alert/alert.js";
+import "@shoelace-style/shoelace/dist/components/drawer/drawer.js";
+import "@shoelace-style/shoelace/dist/components/badge/badge.js";
+import "@shoelace-style/shoelace/dist/components/divider/divider.js";
 
 import type SlDialog from "@shoelace-style/shoelace/dist/components/dialog/dialog.js";
 import type SlInput from "@shoelace-style/shoelace/dist/components/input/input.js";
 import type SlTextarea from "@shoelace-style/shoelace/dist/components/textarea/textarea.js";
+import type SlDrawer from "@shoelace-style/shoelace/dist/components/drawer/drawer.js";
 import { FgInputParameter } from "./components/fg-input-parameter/fg-input-parameter";
 import { FgOutputResult } from "./components/fg-output-result/fg-output-result";
 
@@ -40,6 +43,7 @@ export class FillGoApp extends LitElement {
   @state() private _selectedId: number = 0;
   @state() private _params: Parameter[] = [];
 
+  @query("#fillgo-drawer") fillgoDrawer!: SlDrawer;
   @query("#template-editor") editor!: SlDialog;
   @query("#template-title") inputTitle!: SlInput;
   @query("#template-content") inputContent!: SlTextarea;
@@ -62,8 +66,47 @@ export class FillGoApp extends LitElement {
   render() {
     return html` <div class="layout-grid-root">
       <div class="main-header">
-        <sl-button variant="text" size="small">${Icons.list}</sl-button>
+        <sl-button
+          id="menu-button"
+          variant="text"
+          size="small"
+          @click=${() => this.fillgoDrawer.show()}
+        >
+          ${Icons.list}
+        </sl-button>
         <span>FillGo</span>
+        <sl-drawer
+          id="fillgo-drawer"
+          label="FillGo"
+          placement="start"
+          class="drawer-placement-start"
+        >
+          <sl-button-group label="Alignment">
+            <sl-tooltip content="Upload">
+              <sl-button size="medium">${Icons.upload}</sl-button>
+            </sl-tooltip>
+            <sl-tooltip content="Download">
+              <sl-button size="medium">${Icons.download}</sl-button>
+            </sl-tooltip>
+            <sl-tooltip content="ヘルプ">
+              <sl-button size="medium">${Icons.help}</sl-button>
+            </sl-tooltip>
+          </sl-button-group>
+          <sl-divider></sl-divider>
+          <p>version:<sl-badge variant="primary">1.0.0</sl-badge></p>
+          <sl-divider></sl-divider>
+          <p>
+            <sl-badge variant="success">lit 3.3.1</sl-badge>
+            <sl-badge variant="success">dexie 4.2.1</sl-badge>
+            <sl-badge variant="success">shoelace 2.20.1</sl-badge>
+            <sl-badge variant="success">vite-plugin-singlefile 2.3.0</sl-badge>
+          </p>
+          <p>
+            <sl-badge variant="neutral">sass 1.94.2</sl-badge>
+            <sl-badge variant="neutral">typescript 5.9.3</sl-badge>
+            <sl-badge variant="neutral">vite 7.2.4</sl-badge>
+          </p>
+        </sl-drawer>
       </div>
       <div class="laytou-grid">
         <div class="header">List</div>
@@ -74,18 +117,11 @@ export class FillGoApp extends LitElement {
                 ${Icons.plus}
               </sl-button>
             </sl-tooltip>
+            <!--
             <sl-tooltip content="フィルタ">
               <sl-button size="medium">${Icons.funnel}</sl-button>
             </sl-tooltip>
-            <sl-tooltip content="Upload">
-              <sl-button size="medium">${Icons.upload}</sl-button>
-            </sl-tooltip>
-            <sl-tooltip content="Download">
-              <sl-button size="medium">${Icons.download}</sl-button>
-            </sl-tooltip>
-            <sl-tooltip content="ヘルプ">
-              <sl-button size="medium">${Icons.help}</sl-button>
-            </sl-tooltip>
+            -->
           </sl-button-group>
         </div>
         <div class="contents">
@@ -134,12 +170,14 @@ export class FillGoApp extends LitElement {
                 ${Icons.copy}
               </sl-button>
             </sl-tooltip>
+            <!--
             <sl-tooltip content="保存">
               <sl-button size="medium">${Icons.save}</sl-button>
             </sl-tooltip>
             <sl-tooltip content="履歴">
               <sl-button size="medium">${Icons.history}</sl-button>
             </sl-tooltip>
+            -->
           </sl-button-group>
         </div>
         <div class="contents">

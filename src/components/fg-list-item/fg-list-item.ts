@@ -1,22 +1,15 @@
 import { LitElement, html, css, unsafeCSS } from "lit";
-import { customElement, state, property, query } from "lit/decorators.js";
+import { customElement, property } from "lit/decorators.js";
 import { classMap } from "lit/directives/class-map.js";
 
 import { Icons } from "../../shared/icons";
-import { Template } from "../../service/db";
 
-import { setBasePath } from "@shoelace-style/shoelace/dist/utilities/base-path.js";
-import "@shoelace-style/shoelace/dist/themes/light.css";
-import "@shoelace-style/shoelace/dist/components/tooltip/tooltip.js";
-import "@shoelace-style/shoelace/dist/components/button/button.js";
-import "@shoelace-style/shoelace/dist/components/button-group/button-group.js";
 import "@shoelace-style/shoelace/dist/components/dropdown/dropdown.js";
 import "@shoelace-style/shoelace/dist/components/menu/menu.js";
 import "@shoelace-style/shoelace/dist/components/menu-item/menu-item.js";
 
 import styles from "./fg-list-item.lit.scss?inline";
 
-setBasePath("/");
 @customElement("fg-list-item")
 export class FgListItem extends LitElement {
   static styles = css`

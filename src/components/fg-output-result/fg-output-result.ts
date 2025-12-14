@@ -1,17 +1,12 @@
-import { LitElement, html, css, unsafeCSS, PropertyValues } from "lit";
+import { LitElement, html, css, unsafeCSS } from "lit";
 import { customElement, property, state, query } from "lit/decorators.js";
 import { unsafeHTML } from "lit/directives/unsafe-html.js";
 
-import { Icons } from "../../shared/icons";
 import { db, Template } from "../../service/db";
 import { Parameter } from "../../service/interface";
 
-import { setBasePath } from "@shoelace-style/shoelace/dist/utilities/base-path.js";
-import "@shoelace-style/shoelace/dist/themes/light.css";
-
 import styles from "./fg-output-result.lit.scss?inline";
 
-setBasePath("/");
 @customElement("fg-output-result")
 export class FgOutputResult extends LitElement {
   static styles = css`

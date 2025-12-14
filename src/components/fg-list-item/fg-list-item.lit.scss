@@ -9,18 +9,14 @@
   padding: var(--sl-spacing-2x-small) 0;
 
   border-left: var(--sl-spacing-3x-small) solid transparent;
-  &:hover {
-    border-color: var(--sl-color-primary-500);
-  }
-  &.is-selected {
-    background-color: var(--sl-color-primary-100);
-  }
 
   .text {
     cursor: pointer;
     width: 100%;
     padding-left: var(--sl-spacing-2x-small);
     letter-spacing: var(--sl-letter-spacing-denser);
+
+    color: var(--sl-color-neutral-400);
 
     &.title-area {
       grid-area: title-area;
@@ -29,16 +25,29 @@
       overflow: hidden;
       white-space: nowrap;
 
-      font-size: var(--sl-font-size-small);
+      font-size: var(--sl-font-size-medium);
       font-weight: var(--sl-font-weight-bold);
     }
 
     &.udpateAt-area {
       grid-area: updateAt-area;
       font-size: var(--sl-font-size-small);
+      margin-top: var(--sl-spacing-3x-small);
     }
   }
 
+  &:hover {
+    border-color: var(--sl-color-primary-500);
+    .text {
+      color: var(--sl-color-neutral-1000);
+    }
+  }
+  &.is-selected {
+    background-color: var(--sl-color-primary-100);
+    .text {
+      color: var(--sl-color-neutral-1000);
+    }
+  }
   .button-area {
     grid-area: button-area;
     display: flex;
