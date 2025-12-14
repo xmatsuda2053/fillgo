@@ -1,5 +1,6 @@
 import { LitElement, html, css, unsafeCSS, PropertyValues } from "lit";
 import { customElement, property, state, query } from "lit/decorators.js";
+import { unsafeHTML } from "lit/directives/unsafe-html.js";
 
 import { Icons } from "../../shared/icons";
 import { db, Template } from "../../service/db";
@@ -20,7 +21,6 @@ export class FgOutputResult extends LitElement {
   @property({ type: Number, hasChanged: () => true }) itemId?: number = 0;
   @property({ type: [] }) params?: Parameter[] = [];
   @state() template?: Template = undefined;
-  @state() editedText: string | undefined = "";
   @query("output-result") outputResult!: HTMLDivElement;
 
   constructor() {
@@ -40,19 +40,35 @@ export class FgOutputResult extends LitElement {
   async refresh() {
     if (this.itemId !== undefined && this.itemId !== 0) {
       this.template = await db.selectItemById(this.itemId);
-
-      let workText: string = this.template?.content ?? "";
-      this.params?.forEach((p) => {
-        if (p.value !== "") {
-          const regex = new RegExp(p.key, "g");
-          workText = workText.replace(regex, p.value);
-        }
-      });
-      this.editedText = workText;
     }
   }
 
   render() {
-    return html` <div class="output-result">${this.editedText}</div>`;
+    return html`<div class="result" @click=${this._handleClick}>
+      <div class="inner">${unsafeHTML(this._editText())}</div>
+    </div>`;
+  }
+  private _editText(needFocus: boolean = true) {
+    let workText: string = this.template?.content ?? "";
+
+    this.params?.forEach((p) => {
+      const regex = new RegExp(p.key, "g");
+      if (needFocus && p.isFocus) {
+        workText = workText.replace(
+          regex,
+          `<span class="focus">${p.key}</span>`
+        );
+      }
+      if (p.value !== "") {
+        workText = workText.replace(regex, p.value);
+      }
+    });
+    return workText;
+  }
+  private async _handleClick() {
+    await this.copyText();
+  }
+  async copyText() {
+    await navigator.clipboard.writeText(this._editText(false));
   }
 }

@@ -130,7 +130,9 @@ export class FillGoApp extends LitElement {
         <div class="menu">
           <sl-button-group label="Alignment">
             <sl-tooltip content="コピー">
-              <sl-button size="medium">${Icons.copy}</sl-button>
+              <sl-button size="medium" @click=${this._copyText}>
+                ${Icons.copy}
+              </sl-button>
             </sl-tooltip>
             <sl-tooltip content="保存">
               <sl-button size="medium">${Icons.save}</sl-button>
@@ -280,5 +282,9 @@ export class FillGoApp extends LitElement {
   }
   private _changeParameter(e: CustomEvent) {
     this._params = e.detail.params;
+  }
+
+  private async _copyText() {
+    await this.outputResult.copyText();
   }
 }

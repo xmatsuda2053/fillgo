@@ -48,23 +48,27 @@ export class FgInputParameter extends LitElement {
     return html` <div class="input-parameter">
       ${this.template?.params?.map(
         (f) =>
-          html`<sl-textarea
-            placeholder=${f}
-            size="small"
-            rows="1"
-            resize="auto"
-            @focus=${this._handleFocusAndInput}
-            @input=${this._handleFocusAndInput}
-          ></sl-textarea>`
+          html`<sl-tooltip content=${f} placement="top-start" trigger="focus">
+            <sl-textarea
+              placeholder=${f}
+              size="small"
+              rows="1"
+              resize="auto"
+              @focus=${this._handleChange}
+              @blur=${this._handleChange}
+              @input=${this._handleChange}
+            ></sl-textarea>
+          </sl-tooltip>`
       )}
     </div>`;
   }
 
   async clear() {
     this.textareas.forEach((f) => (f.value = ""));
+    this._handleChange();
   }
 
-  private _handleFocusAndInput() {
+  private _handleChange() {
     const params: Parameter[] = Array.from(this.textareas).map((f) => {
       return {
         key: f.placeholder,
