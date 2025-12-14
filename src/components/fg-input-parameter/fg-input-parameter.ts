@@ -3,6 +3,7 @@ import { customElement, property, state, queryAll } from "lit/decorators.js";
 
 import { Icons } from "../../shared/icons";
 import { db, Template } from "../../service/db";
+import { Parameter } from "../../service/interface";
 
 import { setBasePath } from "@shoelace-style/shoelace/dist/utilities/base-path.js";
 import "@shoelace-style/shoelace/dist/themes/light.css";
@@ -52,6 +53,8 @@ export class FgInputParameter extends LitElement {
             size="small"
             rows="1"
             resize="auto"
+            @focus=${this._handleFocusAndInput}
+            @input=${this._handleFocusAndInput}
           ></sl-textarea>`
       )}
     </div>`;
@@ -59,5 +62,22 @@ export class FgInputParameter extends LitElement {
 
   async clear() {
     this.textareas.forEach((f) => (f.value = ""));
+  }
+
+  private _handleFocusAndInput() {
+    const params: Parameter[] = Array.from(this.textareas).map((f) => {
+      return {
+        key: f.placeholder,
+        value: f.value,
+        isFocus: this.shadowRoot?.activeElement === f,
+      } as Parameter;
+    });
+
+    const event = new CustomEvent("change-param", {
+      detail: { params: params },
+      bubbles: true,
+      composed: true,
+    });
+    this.dispatchEvent(event);
   }
 }

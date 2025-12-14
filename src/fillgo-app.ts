@@ -4,6 +4,7 @@ import { customElement, state, query } from "lit/decorators.js";
 import { Icons } from "./shared/icons";
 import { db, Template } from "./service/db";
 import { formatDate, getParams } from "./service/utils";
+import { Parameter } from "./service/interface";
 
 import "./components/fg-list-root/fg-list-root";
 import "./components/fg-list-item/fg-list-item";
@@ -37,6 +38,7 @@ export class FillGoApp extends LitElement {
 
   @state() private _templates: Template[] = [];
   @state() private _selectedId: number = 0;
+  @state() private _params: Parameter[] = [];
 
   @query("#template-editor") editor!: SlDialog;
   @query("#template-title") inputTitle!: SlInput;
@@ -59,8 +61,12 @@ export class FillGoApp extends LitElement {
 
   render() {
     return html` <div class="layout-grid-root">
+      <div class="main-header">
+        <sl-button variant="text" size="small">${Icons.list}</sl-button>
+        <span>FillGo</span>
+      </div>
       <div class="laytou-grid">
-        <div class="header">FillGo</div>
+        <div class="header">List</div>
         <div class="menu">
           <sl-button-group label="Alignment">
             <sl-tooltip content="新規追加">
@@ -112,7 +118,11 @@ export class FillGoApp extends LitElement {
           </sl-button-group>
         </div>
         <div class="contents">
-          <fg-input-parameter .itemId=${this._selectedId}></fg-input-parameter>
+          <fg-input-parameter
+            @change-param=${this._changeParameter}
+            .itemId=${this._selectedId}
+          >
+          </fg-input-parameter>
         </div>
       </div>
       <div class="laytou-grid">
@@ -131,7 +141,10 @@ export class FillGoApp extends LitElement {
           </sl-button-group>
         </div>
         <div class="contents">
-          <fg-output-result .itemId=${this._selectedId}></fg-output-result>
+          <fg-output-result
+            .itemId=${this._selectedId}
+            .params=${this._params}
+          ></fg-output-result>
         </div>
       </div>
       ${this.renderTemplateEditor()} ${this.renderDeleteDialog()}
@@ -264,5 +277,8 @@ export class FillGoApp extends LitElement {
 
   private _clearParameter() {
     this.inputParameter.clear();
+  }
+  private _changeParameter(e: CustomEvent) {
+    this._params = e.detail.params;
   }
 }
