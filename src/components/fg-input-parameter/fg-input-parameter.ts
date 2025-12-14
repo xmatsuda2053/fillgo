@@ -1,7 +1,6 @@
-import { LitElement, html, css, unsafeCSS, PropertyValues } from "lit";
+import { LitElement, html, css, unsafeCSS } from "lit";
 import { customElement, property, state, queryAll } from "lit/decorators.js";
 
-import { Icons } from "../../shared/icons";
 import { db, Template } from "../../service/db";
 import { Parameter } from "../../service/interface";
 
