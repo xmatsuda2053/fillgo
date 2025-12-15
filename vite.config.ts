@@ -10,6 +10,7 @@ export default defineConfig({
     cssCodeSplit: false,
     minify: true,
     rollupOptions: {
+      input: "./fillgo.html",
       output: {
         inlineDynamicImports: true,
         manualChunks: undefined,
