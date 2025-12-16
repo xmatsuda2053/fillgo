@@ -33,8 +33,8 @@ export class FgListItem extends LitElement {
       <div class="text title-area" @click=${this._selected}>
         <slot name="title" class="title"></slot>
       </div>
-      <div class="text udpateAt-area" @click=${this._selected}>
-        <slot name="updateAt" class="updateAt"></slot>
+      <div class="text description-area" @click=${this._selected}>
+        <slot name="description" class="description"></slot>
       </div>
       <div class="button-area">
         <sl-dropdown>

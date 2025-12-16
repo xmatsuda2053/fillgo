@@ -2,11 +2,12 @@
   display: grid;
   grid-template-columns: 1fr var(--sl-spacing-3x-large);
   grid-template-rows: 1fr 1fr;
-  grid-template-areas: "title-area button-area" "updateAt-area button-area";
+  grid-template-areas: "title-area button-area" "description-area button-area";
   gap: 1px;
 
   width: 100%;
   padding: var(--sl-spacing-2x-small) 0;
+  margin-bottom: var(--sl-spacing-x-small);
 
   border-left: var(--sl-spacing-3x-small) solid transparent;
 
@@ -16,7 +17,7 @@
     padding-left: var(--sl-spacing-2x-small);
     letter-spacing: var(--sl-letter-spacing-denser);
 
-    color: var(--sl-color-neutral-400);
+    color: var(--sl-color-neutral-600);
 
     &.title-area {
       grid-area: title-area;
@@ -29,8 +30,8 @@
       font-weight: var(--sl-font-weight-bold);
     }
 
-    &.udpateAt-area {
-      grid-area: updateAt-area;
+    &.description-area {
+      grid-area: description-area;
       font-size: var(--sl-font-size-small);
       margin-top: var(--sl-spacing-3x-small);
     }

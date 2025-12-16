@@ -136,7 +136,7 @@ export class FillGoApp extends LitElement {
                 .isSelect=${f.id === this._selectedId}
               >
                 <span slot="title">${f.title}</span>
-                <span slot="updateAt">${formatDate(f.updatedAt)}</span>
+                <span slot="description">${formatDate(f.updatedAt)}</span>
               </fg-list-item>`;
             })}
           </fg-list-root>
