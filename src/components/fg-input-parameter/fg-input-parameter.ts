@@ -36,6 +36,7 @@ export class FgInputParameter extends LitElement {
   async refresh() {
     if (this.itemId !== undefined && this.itemId !== 0) {
       this.template = await db.selectItemById(this.itemId);
+      this.clear();
     }
   }
 
