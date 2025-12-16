@@ -81,18 +81,6 @@ export class FillGoApp extends LitElement {
           placement="start"
           class="drawer-placement-start"
         >
-          <sl-button-group label="Alignment">
-            <sl-tooltip content="Upload">
-              <sl-button size="medium">${Icons.upload}</sl-button>
-            </sl-tooltip>
-            <sl-tooltip content="Download">
-              <sl-button size="medium">${Icons.download}</sl-button>
-            </sl-tooltip>
-            <sl-tooltip content="ヘルプ">
-              <sl-button size="medium">${Icons.help}</sl-button>
-            </sl-tooltip>
-          </sl-button-group>
-          <sl-divider></sl-divider>
           <p>version:<sl-badge variant="primary">1.0.0</sl-badge></p>
           <sl-divider></sl-divider>
           <p>
@@ -106,6 +94,17 @@ export class FillGoApp extends LitElement {
             <sl-badge variant="neutral">typescript 5.9.3</sl-badge>
             <sl-badge variant="neutral">vite 7.2.4</sl-badge>
           </p>
+          <sl-button-group label="Alignment" slot="footer">
+            <sl-tooltip content="Upload">
+              <sl-button size="medium">${Icons.upload}</sl-button>
+            </sl-tooltip>
+            <sl-tooltip content="Download">
+              <sl-button size="medium">${Icons.download}</sl-button>
+            </sl-tooltip>
+            <sl-tooltip content="ヘルプ">
+              <sl-button size="medium">${Icons.help}</sl-button>
+            </sl-tooltip>
+          </sl-button-group>
         </sl-drawer>
       </div>
       <div class="laytou-grid">
