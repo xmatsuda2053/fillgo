@@ -29,6 +29,8 @@ import "@shoelace-style/shoelace/dist/components/menu-item/menu-item.js";
 import "@shoelace-style/shoelace/dist/components/dialog/dialog.js";
 import "@shoelace-style/shoelace/dist/components/input/input.js";
 import "@shoelace-style/shoelace/dist/components/textarea/textarea.js";
+import "@shoelace-style/shoelace/dist/components/select/select.js";
+import "@shoelace-style/shoelace/dist/components/option/option.js";
 
 import type { FgListGroup } from "./components/fg-list-group/fg-list-group";
 import type { FgTemplateEditor } from "./components/fg-template-editor/fg-template-editor";
