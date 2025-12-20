@@ -3,7 +3,7 @@
   height: 100vh;
   width: 100vw;
   font-family: var(--sl-font-mono);
-  background-color: var(--sl-color-neutral-50);
+  background-color: var(--sl-color-neutral-100);
   color: var(--sl-color-neutral-900);
 }
 
@@ -14,9 +14,9 @@
   grid-template-areas:
     "fg-header-area fg-header-area"
     "fg-list-area fg-contents-area"
-    "fg-fotter-area fg-fotter-area";
+    "fg-footer-area fg-footer-area";
   gap: var(--sl-spacing-x-small) 0;
-  background-color: var(--sl-color-neutral-200);
+  background-color: var(--sl-color-neutral-100);
   height: 100%;
 
   .fg-header-area {
@@ -35,21 +35,35 @@
       font-size: var(--sl-font-size-large);
       font-weight: var(--sl-font-weight-bold);
     }
+
+    sl-drawer {
+      sl-tab-group {
+        sl-tab {
+          sl-icon {
+            margin-right: var(--sl-spacing-2x-small);
+          }
+        }
+      }
+    }
   }
 
   .fg-list-area {
     grid-area: fg-list-area;
+    height: 100%;
+    min-height: 0;
     padding: 0 var(--sl-spacing-x-small);
     border-right: 1px solid var(--sl-color-neutral-400);
   }
 
   .fg-contents-area {
     grid-area: fg-contents-area;
+    height: 100%;
+    min-height: 0;
     padding: 0 var(--sl-spacing-x-small);
   }
 
-  .fg-fotter-area {
-    grid-area: fg-fotter-area;
+  .fg-footer-area {
+    grid-area: fg-footer-area;
     background-color: var(--sl-color-neutral-1000);
   }
 

@@ -1,0 +1,70 @@
+#dialog-template-editor {
+  --width: 60%;
+
+  &::part(title) {
+    padding-bottom: var(--sl-spacing-x-small);
+  }
+
+  &::part(body) {
+    padding-top: 0;
+    padding-bottom: 0;
+  }
+
+  &::part(footer) {
+    padding-top: 0;
+  }
+
+  sl-tab-panel {
+    padding: 0 var(--sl-spacing-2x-small);
+  }
+
+  .label-on-left {
+    --label-width: 3.75rem;
+    --gap-width: 1rem;
+
+    + .label-on-left {
+      margin-top: var(--sl-spacing-medium);
+    }
+
+    &::part(form-control) {
+      display: grid;
+      grid: auto / var(--label-width) 1fr;
+      gap: var(--sl-spacing-3x-small) var(--gap-width);
+      align-items: center;
+    }
+
+    &::part(form-control-label) {
+      text-align: left;
+    }
+
+    &::part(form-control-help-text) {
+      grid-column-start: 2;
+    }
+  }
+
+  .editor-form {
+    sl-textarea {
+      &::part(textarea) {
+        min-height: 80px;
+      }
+    }
+
+    @media (min-height: 550px) {
+      height: 300px;
+      sl-textarea {
+        &::part(textarea) {
+          min-height: 200px;
+        }
+      }
+    }
+
+    @media (min-height: 900px) {
+      height: 600px;
+      sl-textarea {
+        &::part(textarea) {
+          min-height: 500px;
+        }
+      }
+    }
+  }
+}

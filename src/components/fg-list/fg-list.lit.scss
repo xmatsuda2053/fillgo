@@ -1,0 +1,33 @@
+:host {
+  display: block;
+}
+
+.fg-list {
+  cursor: pointer;
+  background-color: var(--sl-color-neutral-0);
+  border-left: var(--sl-spacing-2x-small) solid var(--sl-color-neutral-200);
+  transition: box-shadow var(--sl-transition-fast, 0.2s ease);
+
+  &:hover,
+  &.is-selected {
+    border-color: var(--sl-color-primary-500);
+    box-shadow: var(--sl-shadow-large);
+  }
+
+  .title {
+    font-size: var(--sl-font-size-medium);
+    font-weight: var(--sl-font-weight-bold);
+    text-overflow: ellipsis;
+    overflow: hidden;
+    white-space: nowrap;
+    padding: var(--sl-spacing-2x-small);
+    padding-left: var(--sl-spacing-x-small);
+  }
+  .tag {
+    font-size: var(--sl-font-size-small);
+    color: var(--sl-color-neutral-400);
+    text-align: right;
+    padding: var(--sl-spacing-2x-small);
+    padding-right: var(--sl-spacing-x-small);
+  }
+}
