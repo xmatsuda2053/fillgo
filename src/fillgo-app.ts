@@ -168,7 +168,7 @@ export class FillGoApp extends LitElement {
               <sl-tab-panel name="settings"> </sl-tab-panel>
               <sl-tab-panel name="storage"> </sl-tab-panel>
               <sl-tab-panel name="about">
-                version:<sl-badge variant="primary">1.0.0</sl-badge>
+                version:<sl-badge variant="primary">0.0.1</sl-badge>
               </sl-tab-panel>
             </sl-tab-group>
           </sl-drawer>
