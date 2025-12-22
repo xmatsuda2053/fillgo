@@ -29,8 +29,8 @@ import "@shoelace-style/shoelace/dist/components/menu-item/menu-item.js";
 import "@shoelace-style/shoelace/dist/components/dialog/dialog.js";
 import "@shoelace-style/shoelace/dist/components/input/input.js";
 import "@shoelace-style/shoelace/dist/components/textarea/textarea.js";
-import "@shoelace-style/shoelace/dist/components/select/select.js";
-import "@shoelace-style/shoelace/dist/components/option/option.js";
+import "@shoelace-style/shoelace/dist/components/radio-button/radio-button.js";
+import "@shoelace-style/shoelace/dist/components/radio-group/radio-group.js";
 
 import type { FgListGroup } from "./components/fg-list-group/fg-list-group";
 import type { FgTemplateEditor } from "./components/fg-template-editor/fg-template-editor";
@@ -52,6 +52,9 @@ import gear from "./icons/gear.svg?raw";
 import database from "./icons/database.svg?raw";
 import infoSquare from "./icons/info-square.svg?raw";
 import floppy2Fill from "./icons/floppy2-fill.svg?raw";
+import fonts from "./icons/fonts.svg?raw";
+import svg123 from "./icons/123.svg?raw";
+import calendar3Event from "./icons/calendar3-event.svg?raw";
 const icons: Record<string, string> = {
   list: list,
   download: download,
@@ -65,6 +68,9 @@ const icons: Record<string, string> = {
   database: database,
   "info-square": infoSquare,
   "floppy2-fill": floppy2Fill,
+  fonts: fonts,
+  "123": svg123,
+  "calendar3-event": calendar3Event,
 };
 
 setBasePath("/");

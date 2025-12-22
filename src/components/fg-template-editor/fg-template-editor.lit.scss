@@ -18,31 +18,41 @@
     padding: 0 var(--sl-spacing-2x-small);
   }
 
-  .label-on-left {
-    --label-width: 3.75rem;
-    --gap-width: 1rem;
-
-    + .label-on-left {
-      margin-top: var(--sl-spacing-medium);
-    }
-
-    &::part(form-control) {
-      display: grid;
-      grid: auto / var(--label-width) 1fr;
-      gap: var(--sl-spacing-3x-small) var(--gap-width);
-      align-items: center;
-    }
-
-    &::part(form-control-label) {
-      text-align: left;
-    }
-
-    &::part(form-control-help-text) {
-      grid-column-start: 2;
-    }
-  }
-
   .editor-form {
+    .label-on-left {
+      &:not(.width-manual) {
+        --label-width: 4rem;
+      }
+      &.width-manual {
+        @for $i from 1 through 18 {
+          &.w-#{$i} {
+            --label-width: #{$i + 1}rem;
+          }
+        }
+      }
+
+      --gap-width: 1rem;
+
+      & + .label-on-left {
+        margin-top: var(--sl-spacing-medium);
+      }
+
+      &::part(form-control) {
+        display: grid;
+        grid: auto / var(--label-width) 1fr;
+        gap: var(--sl-spacing-3x-small) var(--gap-width);
+        align-items: center;
+      }
+
+      &::part(form-control-label) {
+        text-align: left;
+      }
+
+      &::part(form-control-help-text) {
+        grid-column-start: 2;
+      }
+    }
+
     sl-textarea {
       &::part(textarea) {
         min-height: 80px;

@@ -6,14 +6,23 @@ import {
   PropertyValues,
   HTMLTemplateResult,
 } from "lit";
-import { customElement, state, property, query } from "lit/decorators.js";
+import {
+  customElement,
+  state,
+  property,
+  query,
+  queryAll,
+} from "lit/decorators.js";
 import { emit } from "../../shared/event";
-
-import styles from "./fg-template-editor.lit.scss?inline";
+import { extractParams, getTotalFullWidthCount } from "../../service/utils";
+import type { Param } from "../../interface/Param";
 
 import type SlDialog from "@shoelace-style/shoelace/dist/components/dialog/dialog.js";
 import type SlInput from "@shoelace-style/shoelace/dist/components/input/input.js";
 import type SlTextarea from "@shoelace-style/shoelace/dist/components/textarea/textarea.js";
+import type SlRadioGroup from "@shoelace-style/shoelace/dist/components/radio-group/radio-group.js";
+
+import styles from "./fg-template-editor.lit.scss?inline";
 
 @customElement("fg-template-editor")
 export class FgTemplateEditor extends LitElement {
@@ -21,7 +30,7 @@ export class FgTemplateEditor extends LitElement {
     ${unsafeCSS(styles)}
   `;
 
-  @state() private _params: string[] = [];
+  @state() private _params: Param[] = [];
 
   /**
    * テンプレートを編集するための画面要素。
@@ -56,6 +65,14 @@ export class FgTemplateEditor extends LitElement {
   @query("#template-params") inputParams!: SlInput;
 
   /**
+   * パラメータ要素のラベルを管理するための要素。
+   *
+   * @type {SlRadioGroup[]}
+   * @memberof FgTemplateEditor
+   */
+  @queryAll(".width-manual") paramLabels!: SlRadioGroup[];
+
+  /**
    * Creates an instance of FillGoApp.
    * @memberof FillGoApp
    */
@@ -79,56 +96,17 @@ export class FgTemplateEditor extends LitElement {
       id="dialog-template-editor"
       @sl-request-close=${this._handleRequestClose}
     >
-      <sl-tab-group>
+      <sl-tab-group id="editor-tab">
         <sl-tab slot="nav" panel="base">Base</sl-tab>
         <sl-tab slot="nav" panel="params">Params</sl-tab>
         <sl-tab slot="nav" panel="other">Other</sl-tab>
         <sl-tab-panel name="base">
           <form id="editor-input-data" class="editor-form">
-            <sl-input
-              id="template-title"
-              class="label-on-left"
-              label="Title"
-              placeholder="e.g. 業務連絡"
-              size="small"
-              clearable
-            ></sl-input>
-            <sl-textarea
-              id="template-content"
-              class="label-on-left"
-              label="Contents"
-              placeholder="e.g. {所属} の {氏名} さんから次の通り連絡がありました。"
-              size="small"
-              resize="none"
-              @input=${this._handleInputTemplateContents}
-            ></sl-textarea>
-            <sl-input
-              id="template-params"
-              class="label-on-left"
-              label="Params"
-              size="small"
-              value=${this._params.join(",")}
-              disabled
-            >
-            </sl-input>
+            ${this._renderBaseInput()}
           </form>
         </sl-tab-panel>
         <sl-tab-panel name="params">
-          <form class="editor-form">
-            ${this._params.map(
-              (p, i) => html`<sl-select
-                id="type${i}"
-                label=${p}
-                class="label-on-left"
-                size="small"
-                value="string"
-              >
-                <sl-option value="string">String</sl-option>
-                <sl-option value="number">Number</sl-option>
-                <sl-option value="date">Date</sl-option>
-              </sl-select>`
-            )}
-          </form>
+          <form class="editor-form">${this._renderParamsInput()}</form>
         </sl-tab-panel>
         <sl-tab-panel name="other">
           <form class="editor-form">other</form>
@@ -142,6 +120,118 @@ export class FgTemplateEditor extends LitElement {
   }
 
   /**
+   * 基礎項目入力画面の基本構造を定義します。
+   *
+   * @private
+   * @return {*}  {HTMLTemplateResult}
+   * @memberof FgTemplateEditor
+   */
+  private _renderBaseInput(): HTMLTemplateResult {
+    return html`<sl-input
+        id="template-title"
+        class="label-on-left"
+        label="Title"
+        placeholder="e.g. 業務連絡"
+        size="small"
+        clearable
+      ></sl-input>
+      <sl-textarea
+        id="template-content"
+        class="label-on-left"
+        label="Contents"
+        placeholder="e.g. {所属} の {氏名} さんから次の通り連絡がありました。"
+        size="small"
+        resize="none"
+        @input=${this._handleInputTemplateContents}
+      ></sl-textarea>
+      <sl-input
+        id="template-params"
+        class="label-on-left"
+        label="Params"
+        size="small"
+        value=${this._params.map((p) => p.value).join(",")}
+        disabled
+      >
+      </sl-input>`;
+  }
+
+  /**
+   * パラメータ入力画面の基本構造を定義します。
+   *
+   * @private
+   * @return {*}  {HTMLTemplateResult}
+   * @memberof FgTemplateEditor
+   */
+  private _renderParamsInput(): HTMLTemplateResult {
+    return html`${this._params.map(
+      (p, i) => html`<sl-radio-group
+        id="type${i}"
+        label=${p.value}
+        class="label-on-left width-manual"
+        size="small"
+        value=${p.type}
+        @sl-change=${(e: Event) => this._handleTypeChange(e, i)}
+      >
+        <sl-radio-button value="string">
+          <sl-icon slot="prefix" library="fillgo" name="fonts"></sl-icon>
+          String
+        </sl-radio-button>
+        <sl-radio-button value="number">
+          <sl-icon slot="prefix" library="fillgo" name="123"></sl-icon>
+          Number
+        </sl-radio-button>
+        <sl-radio-button value="date">
+          <sl-icon
+            slot="prefix"
+            library="fillgo"
+            name="calendar3-event"
+          ></sl-icon>
+          Date
+        </sl-radio-button>
+      </sl-radio-group>`
+    )}`;
+  }
+
+  /**
+   * パラメータのラジオボタンの変更を反映します。
+   * @param {CustomEvent} e - Shoelaceのイベントオブジェクト
+   * @param {number} index - 更新対象のパラメータのインデックス
+   */
+  private _handleTypeChange(e: Event, index: number): void {
+    const target = e.target as HTMLInputElement;
+    const newType = target.value;
+    this._params = this._params.map((p, i) =>
+      i === index ? { ...p, type: newType } : p
+    );
+  }
+
+  /**
+   * 画面アップデート後「Params」タブのラベルwidthを変更する。
+   *
+   * @protected
+   * @param {PropertyValues} _changedProperties
+   * @memberof FgTemplateEditor
+   */
+  protected async updated(_changedProperties: PropertyValues) {
+    super.updated(_changedProperties);
+
+    if (_changedProperties.has("_params")) {
+      if (this._params && this._params.length > 0) {
+        const maxRemSize = this._params
+          .map((p) => {
+            return Math.ceil(getTotalFullWidthCount(p.value) - 1);
+          })
+          .reduce((a, b) => Math.max(a, b), 0);
+
+        Array.from(this.paramLabels).forEach((g) => {
+          g.className = g.className.replace(/\bw-\d+\b/g, "");
+          g.classList.add(`w-${maxRemSize}`);
+        });
+      }
+    }
+  }
+
+  /**
    * 閉じるリクエストを処理し、ドキュメント内のアクティブなフォーカスを解除します。
    *
    * @private
@@ -152,30 +242,19 @@ export class FgTemplateEditor extends LitElement {
   }
 
   /**
-   * テンプレート本文の入力イベントをハンドリングし、含まれるパラメータを抽出して反映します。
-   * 本文（inputContent）から抽出された重複のないパラメータをカンマ区切りで
-   * パラメータ入力欄（inputParam）の初期値として設定します。
+   * テンプレート本文の入力を監視し、パラメータ（_params）を同期します。
+   * 既存のパラメータは設定（type等）を維持し、新規は追加、存在しないものは削除します。
    * * @private
    * @returns {void}
    * @memberof FgTemplateEditor
    */
   private _handleInputTemplateContents(): void {
-    this._params = this._extractParams(this.inputContent.value);
-  }
-
-  /**
-   * 文字列の中から {変数名} 形式のパターンを抽出し、重複を除去した配列を返します。
-   * * @example
-   * // 入力: "Hello {name}, welcome to {place}. {name}!"
-   * // 出力: ["{name}", "{place}"]
-   * * @private
-   * @param {string} s - パラメータ抽出対象のソース文字列
-   * @returns {string[]} 重複を除去したパラメータ名の配列。マッチしない場合は空配列を返します。
-   * @memberof FgTemplateEditor
-   */
-  private _extractParams(s: string): string[] {
-    const pattern: RegExp = /{[^}]+}/g;
-    return [...new Set(s.match(pattern) || [])];
+    const nextValues = extractParams(this.inputContent.value);
+    const nextParams = nextValues.map((v) => {
+      const existing = this._params.find((p) => p.value === v);
+      return existing ? existing : { value: v, type: "string" };
+    });
+    this._params = [...nextParams];
   }
 
   /**
