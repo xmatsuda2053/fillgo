@@ -173,9 +173,13 @@ export class FillGoApp extends LitElement {
                 About
               </sl-tab>
               <sl-tab-panel name="settings">
-                <sl-details summary="カテゴリ" open>
+                <div class="group">
+                  <div class="group-title">
+                    <sl-icon library="fillgo" name="bookmark"></sl-icon>
+                    カテゴリ
+                  </div>
                   <fg-setting-category></fg-setting-category>
-                </sl-details>
+                </div>
               </sl-tab-panel>
               <sl-tab-panel name="storage"> </sl-tab-panel>
               <sl-tab-panel name="about">

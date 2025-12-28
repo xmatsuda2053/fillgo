@@ -44,6 +44,25 @@
           }
         }
       }
+
+      .group {
+        border: 1px solid var(--sl-color-neutral-300);
+        border-radius: var(--sl-spacing-2x-small);
+        padding: var(--sl-spacing-large) var(--sl-spacing-small);
+
+        .group-title {
+          margin-bottom: var(--sl-spacing-large);
+
+          display: flex;
+          align-items: center;
+          justify-content: var(--sl-spacing-2x-small);
+          gap: 5px;
+
+          sl-icon {
+            margin-top: -2px;
+          }
+        }
+      }
     }
   }
 
