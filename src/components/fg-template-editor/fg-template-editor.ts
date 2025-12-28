@@ -97,9 +97,9 @@ export class FgTemplateEditor extends LitElement {
       @sl-request-close=${this._handleRequestClose}
     >
       <sl-tab-group id="editor-tab">
-        <sl-tab slot="nav" panel="base">Base</sl-tab>
-        <sl-tab slot="nav" panel="params">Params</sl-tab>
-        <sl-tab slot="nav" panel="other">Other</sl-tab>
+        <sl-tab slot="nav" panel="base">基本情報</sl-tab>
+        <sl-tab slot="nav" panel="params">パラメータ</sl-tab>
+        <sl-tab slot="nav" panel="other">設定</sl-tab>
         <sl-tab-panel name="base">
           <form id="editor-input-data" class="editor-form">
             ${this._renderBaseInput()}
@@ -114,7 +114,7 @@ export class FgTemplateEditor extends LitElement {
       </sl-tab-group>
       <sl-button slot="footer" variant="primary">
         <sl-icon slot="prefix" library="fillgo" name="floppy2-fill"></sl-icon>
-        Save
+        保存
       </sl-button>
     </sl-dialog>`;
   }
@@ -130,7 +130,7 @@ export class FgTemplateEditor extends LitElement {
     return html`<sl-input
         id="template-title"
         class="label-on-left"
-        label="Title"
+        label="タイトル"
         placeholder="e.g. 業務連絡"
         size="small"
         clearable
@@ -138,7 +138,7 @@ export class FgTemplateEditor extends LitElement {
       <sl-textarea
         id="template-content"
         class="label-on-left"
-        label="Contents"
+        label="内容"
         placeholder="e.g. {所属} の {氏名} さんから次の通り連絡がありました。"
         size="small"
         resize="none"
@@ -147,7 +147,7 @@ export class FgTemplateEditor extends LitElement {
       <sl-input
         id="template-params"
         class="label-on-left"
-        label="Params"
+        label="パラメータ"
         size="small"
         value=${this._params.map((p) => p.value).join(",")}
         disabled
