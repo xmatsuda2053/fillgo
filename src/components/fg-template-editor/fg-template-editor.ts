@@ -221,11 +221,11 @@ export class FgTemplateEditor extends LitElement {
       >
         <sl-radio-button value="string">
           <sl-icon slot="prefix" library="fillgo" name="fonts"></sl-icon>
-          String
+          文字列
         </sl-radio-button>
         <sl-radio-button value="number">
           <sl-icon slot="prefix" library="fillgo" name="123"></sl-icon>
-          Number
+          数値
         </sl-radio-button>
         <sl-radio-button value="date">
           <sl-icon
@@ -233,9 +233,9 @@ export class FgTemplateEditor extends LitElement {
             library="fillgo"
             name="calendar3-event"
           ></sl-icon>
-          Date
+          日付
         </sl-radio-button>
-      </sl-radio-group>`
+      </sl-radio-group> `
     )}`;
   }
 
