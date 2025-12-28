@@ -1,5 +1,5 @@
 #dialog-template-editor {
-  --width: 60%;
+  --width: 900px;
 
   &::part(title) {
     padding-bottom: var(--sl-spacing-x-small);
@@ -21,7 +21,7 @@
   .editor-form {
     .label-on-left {
       &:not(.width-manual) {
-        --label-width: 5rem;
+        --label-width: 4rem;
       }
       &.width-manual {
         @for $i from 1 through 18 {
@@ -74,6 +74,28 @@
         &::part(textarea) {
           min-height: 500px;
         }
+      }
+    }
+  }
+
+  .base-container {
+    display: grid;
+    grid-auto-columns: 1fr;
+    grid-auto-rows: 1fr;
+    grid-template-columns: 1fr 300px;
+    grid-template-rows: 1fr;
+    gap: 0em 1em;
+    grid-template-areas: "base-l base-r";
+
+    .base-l {
+      grid-area: base-l;
+    }
+    .base-r {
+      grid-area: base-r;
+      overflow-y: scroll;
+
+      sl-button {
+        margin-bottom: var(--sl-spacing-x-small);
       }
     }
   }

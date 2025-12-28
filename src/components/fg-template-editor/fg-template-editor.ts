@@ -15,6 +15,7 @@ import {
 } from "lit/decorators.js";
 import { emit } from "../../shared/event";
 import { extractParams, getTotalFullWidthCount } from "../../service/utils";
+import { db, Category } from "../../service/db";
 import type { Param } from "../../interface/Param";
 
 import type SlDialog from "@shoelace-style/shoelace/dist/components/dialog/dialog.js";
@@ -23,6 +24,7 @@ import type SlTextarea from "@shoelace-style/shoelace/dist/components/textarea/t
 import type SlRadioGroup from "@shoelace-style/shoelace/dist/components/radio-group/radio-group.js";
 
 import styles from "./fg-template-editor.lit.scss?inline";
+import { SlButton } from "@shoelace-style/shoelace";
 
 @customElement("fg-template-editor")
 export class FgTemplateEditor extends LitElement {
@@ -31,6 +33,14 @@ export class FgTemplateEditor extends LitElement {
   `;
 
   @state() private _params: Param[] = [];
+
+  /**
+   * カテゴリ一覧
+   * @private
+   * @type {Category[]}
+   * @memberof FgSettingCategory
+   */
+  @state() private _categorys: Category[] = [];
 
   /**
    * テンプレートを編集するための画面要素。
@@ -73,6 +83,14 @@ export class FgTemplateEditor extends LitElement {
   @queryAll(".width-manual") paramLabels!: SlRadioGroup[];
 
   /**
+   * カテゴリ洗濯用のボタンを管理するための要素。
+   *
+   * @type {SlButton[]}
+   * @memberof FgTemplateEditor
+   */
+  @queryAll(".category-button") categoryButtons!: SlButton[];
+
+  /**
    * Creates an instance of FillGoApp.
    * @memberof FillGoApp
    */
@@ -80,8 +98,22 @@ export class FgTemplateEditor extends LitElement {
     super();
   }
 
-  protected willUpdate(_changedProperties: PropertyValues) {}
+  /**
+   * 画面更新前の処理を実行します。
+   * @param _changedProperties
+   */
+  protected willUpdate(_changedProperties: PropertyValues) {
+    this._refresh();
+  }
 
+  /**
+   * タグ一覧を取得します。
+   * @private
+   * @memberof FgSettingCategory
+   */
+  private async _refresh() {
+    this._categorys = await db.selectCategorys();
+  }
   /**
    * コンポーネントのメインレイアウトをレンダリングします。
    * ツールバーおよびコンテンツから構成されるリストビューの基本構造を定義します。
@@ -98,18 +130,14 @@ export class FgTemplateEditor extends LitElement {
     >
       <sl-tab-group id="editor-tab">
         <sl-tab slot="nav" panel="base">基本情報</sl-tab>
-        <sl-tab slot="nav" panel="params">パラメータ</sl-tab>
-        <sl-tab slot="nav" panel="other">設定</sl-tab>
+        <sl-tab slot="nav" panel="params">パラメタ定義</sl-tab>
         <sl-tab-panel name="base">
-          <form id="editor-input-data" class="editor-form">
+          <div id="editor-input-data" class="editor-form">
             ${this._renderBaseInput()}
-          </form>
+          </div>
         </sl-tab-panel>
         <sl-tab-panel name="params">
-          <form class="editor-form">${this._renderParamsInput()}</form>
-        </sl-tab-panel>
-        <sl-tab-panel name="other">
-          <form class="editor-form">other</form>
+          <div class="editor-form">${this._renderParamsInput()}</div>
         </sl-tab-panel>
       </sl-tab-group>
       <sl-button slot="footer" variant="primary">
@@ -127,32 +155,51 @@ export class FgTemplateEditor extends LitElement {
    * @memberof FgTemplateEditor
    */
   private _renderBaseInput(): HTMLTemplateResult {
-    return html`<sl-input
-        id="template-title"
-        class="label-on-left"
-        label="タイトル"
-        placeholder="e.g. 業務連絡"
-        size="small"
-        clearable
-      ></sl-input>
-      <sl-textarea
-        id="template-content"
-        class="label-on-left"
-        label="内容"
-        placeholder="e.g. {所属} の {氏名} さんから次の通り連絡がありました。"
-        size="small"
-        resize="none"
-        @input=${this._handleInputTemplateContents}
-      ></sl-textarea>
-      <sl-input
-        id="template-params"
-        class="label-on-left"
-        label="パラメータ"
-        size="small"
-        value=${this._params.map((p) => p.value).join(",")}
-        disabled
-      >
-      </sl-input>`;
+    return html`<div class="base-container">
+      <div class="base-l">
+        <sl-input
+          id="template-title"
+          class="label-on-left"
+          label="タイトル"
+          placeholder="e.g. 業務連絡"
+          size="small"
+          clearable
+        ></sl-input>
+        <sl-textarea
+          id="template-content"
+          class="label-on-left"
+          label="内容"
+          placeholder="e.g. {所属} の {氏名} さんから次の通り連絡がありました。"
+          size="small"
+          resize="none"
+          @input=${this._handleInputTemplateContents}
+        ></sl-textarea>
+        <sl-input
+          id="template-params"
+          class="label-on-left"
+          label="パラメタ"
+          size="small"
+          value=${this._params.map((p) => p.value).join(",")}
+          disabled
+        >
+        </sl-input>
+      </div>
+      <div class="base-r">
+        ${this._categorys.map(
+          (f) => html`
+            <sl-button
+              variant="default"
+              size="small"
+              class="category-button"
+              @click=${this._handleClickCategory}
+              pill
+            >
+              ${f.name}
+            </sl-button>
+          `
+        )}
+      </div>
+    </div>`;
   }
 
   /**
@@ -255,6 +302,23 @@ export class FgTemplateEditor extends LitElement {
       return existing ? existing : { value: v, type: "string" };
     });
     this._params = [...nextParams];
+  }
+
+  /**
+   * クリックしたカテゴリを選択状態とします。
+   *
+   * @private
+   * @param {Event} e
+   * @memberof FgTemplateEditor
+   */
+  private _handleClickCategory(e: Event) {
+    const clickedButton = e.currentTarget as SlButton;
+
+    this.categoryButtons.forEach((btn) => {
+      btn.variant = "default";
+    });
+
+    clickedButton.variant = "primary";
   }
 
   /**

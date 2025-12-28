@@ -43,10 +43,10 @@ export class FgSettingCategory extends LitElement {
   }
 
   /**
-   * 画面更新前にタグ一覧を更新します。
+   * 画面更新前の処理を実行します。
    * @param _changedProperties
    */
-  protected async willUpdate(_changedProperties: PropertyValues) {
+  protected willUpdate(_changedProperties: PropertyValues) {
     this._refresh();
   }
 
