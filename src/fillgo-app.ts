@@ -10,6 +10,7 @@ import { customElement, state, query } from "lit/decorators.js";
 import { setBasePath } from "@shoelace-style/shoelace/dist/utilities/base-path.js";
 import { registerIconLibrary } from "@shoelace-style/shoelace/dist/utilities/icon-library.js";
 
+import "./components/fg-setting-category/fg-setting-category";
 import "./components/fg-template-editor/fg-template-editor";
 import "./components/fg-list/fg-list";
 import "./components/fg-list-group/fg-list-group";
@@ -18,10 +19,12 @@ import "@shoelace-style/shoelace/dist/components/badge/badge.js";
 import "@shoelace-style/shoelace/dist/components/button/button.js";
 import "@shoelace-style/shoelace/dist/components/button-group/button-group.js";
 import "@shoelace-style/shoelace/dist/components/drawer/drawer.js";
+import "@shoelace-style/shoelace/dist/components/details/details.js";
 import "@shoelace-style/shoelace/dist/components/icon-button/icon-button.js";
 import "@shoelace-style/shoelace/dist/components/tab/tab.js";
 import "@shoelace-style/shoelace/dist/components/tab-group/tab-group.js";
 import "@shoelace-style/shoelace/dist/components/tab-panel/tab-panel.js";
+import "@shoelace-style/shoelace/dist/components/tag/tag.js";
 import "@shoelace-style/shoelace/dist/components/tooltip/tooltip.js";
 import "@shoelace-style/shoelace/dist/components/dropdown/dropdown.js";
 import "@shoelace-style/shoelace/dist/components/menu/menu.js";
@@ -165,7 +168,11 @@ export class FillGoApp extends LitElement {
                 <sl-icon library="fillgo" name="info-square"></sl-icon>
                 About
               </sl-tab>
-              <sl-tab-panel name="settings"> </sl-tab-panel>
+              <sl-tab-panel name="settings">
+                <sl-details summary="カテゴリ" open>
+                  <fg-setting-category></fg-setting-category>
+                </sl-details>
+              </sl-tab-panel>
               <sl-tab-panel name="storage"> </sl-tab-panel>
               <sl-tab-panel name="about">
                 version:<sl-badge variant="primary">0.0.1</sl-badge>

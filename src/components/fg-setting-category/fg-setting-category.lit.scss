@@ -1,0 +1,19 @@
+.category-root {
+  padding: 0 var(--sl-spacing-2x-small);
+
+  .category-input-area {
+    display: flex;
+    gap: var(--sl-spacing-2x-small);
+    margin-bottom: var(--sl-spacing-small);
+
+    sl-input {
+      flex-grow: 1;
+    }
+  }
+
+  .category-items {
+    sl-tag {
+      margin-bottom: var(--sl-spacing-2x-small);
+    }
+  }
+}
