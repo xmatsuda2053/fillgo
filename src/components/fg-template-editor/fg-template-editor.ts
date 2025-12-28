@@ -235,6 +235,10 @@ export class FgTemplateEditor extends LitElement {
           ></sl-icon>
           日付
         </sl-radio-button>
+        <sl-radio-button value="time">
+          <sl-icon slot="prefix" library="fillgo" name="clock"></sl-icon>
+          時刻
+        </sl-radio-button>
       </sl-radio-group> `
     )}`;
   }

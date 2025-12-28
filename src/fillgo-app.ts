@@ -58,6 +58,7 @@ import floppy2Fill from "./icons/floppy2-fill.svg?raw";
 import fonts from "./icons/fonts.svg?raw";
 import svg123 from "./icons/123.svg?raw";
 import calendar3Event from "./icons/calendar3-event.svg?raw";
+import clock from "./icons/clock.svg?raw";
 const icons: Record<string, string> = {
   list: list,
   download: download,
@@ -74,6 +75,7 @@ const icons: Record<string, string> = {
   fonts: fonts,
   "123": svg123,
   "calendar3-event": calendar3Event,
+  clock: clock,
 };
 
 setBasePath("/");
