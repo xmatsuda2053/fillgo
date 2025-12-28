@@ -59,6 +59,7 @@ import fonts from "./icons/fonts.svg?raw";
 import svg123 from "./icons/123.svg?raw";
 import calendar3Event from "./icons/calendar3-event.svg?raw";
 import clock from "./icons/clock.svg?raw";
+import bookmark from "./icons/bookmark.svg?raw";
 const icons: Record<string, string> = {
   list: list,
   download: download,
@@ -76,6 +77,7 @@ const icons: Record<string, string> = {
   "123": svg123,
   "calendar3-event": calendar3Event,
   clock: clock,
+  bookmark: bookmark,
 };
 
 setBasePath("/");
@@ -191,26 +193,12 @@ export class FillGoApp extends LitElement {
             @clickMenuDelete=${this._handleMenuDeleteClick}
             @clickList=${this._handleListClick}
           >
-            <fg-list listId="1" tag="tag1">test1</fg-list>
-            <fg-list listId="2" tag="tag2">test2</fg-list>
-            <fg-list listId="3" tag="tag3">test3</fg-list>
-            <fg-list listId="4" tag="tag4">test4</fg-list>
-            <fg-list listId="5" tag="tag5">test5</fg-list>
-            <fg-list listId="6" tag="tag6">test6</fg-list>
-            <fg-list listId="7" tag="tag7">test7</fg-list>
-            <fg-list listId="8" tag="tag8">test8</fg-list>
-            <fg-list listId="9" tag="tag9">test9</fg-list>
-            <fg-list listId="10" tag="tag10">test10</fg-list>
-            <fg-list listId="11" tag="tag11">test11</fg-list>
-            <fg-list listId="12" tag="tag12">test12</fg-list>
-            <fg-list listId="13" tag="tag13">test13</fg-list>
-            <fg-list listId="14" tag="tag14">test14</fg-list>
-            <fg-list listId="15" tag="tag15">test15</fg-list>
-            <fg-list listId="16" tag="tag16">test16</fg-list>
-            <fg-list listId="17" tag="tag17">test17</fg-list>
-            <fg-list listId="18" tag="tag18">test18</fg-list>
-            <fg-list listId="19" tag="tag19">test19</fg-list>
-            <fg-list listId="20" tag="tag20">test20</fg-list>
+            <fg-list listId="1" category="category"
+              >test1test1test1test1test1test1</fg-list
+            >
+            <fg-list listId="1" category="category">test1</fg-list>
+            <fg-list listId="1" category="category">test1</fg-list>
+            <fg-list listId="1" category="category">test1</fg-list>
           </fg-list-group>
         </div>
         <div class="fg-contents-area">

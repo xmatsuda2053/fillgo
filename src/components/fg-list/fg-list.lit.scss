@@ -23,11 +23,20 @@
     padding: var(--sl-spacing-2x-small);
     padding-left: var(--sl-spacing-x-small);
   }
-  .tag {
+  .category {
     font-size: var(--sl-font-size-small);
     color: var(--sl-color-neutral-400);
     text-align: right;
     padding: var(--sl-spacing-2x-small);
     padding-right: var(--sl-spacing-x-small);
+
+    display: flex;
+    align-items: center;
+    justify-content: right;
+    gap: 1px;
+
+    sl-icon {
+      font-size: var(--sl-font-size-x-small);
+    }
   }
 }

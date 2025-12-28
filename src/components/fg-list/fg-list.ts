@@ -36,12 +36,12 @@ export class FgList extends LitElement {
   @property({ type: String }) listId?: string;
 
   /**
-   * リストに設定されたタグ
+   * リストのカテゴリ
    *
    * @type {string}
    * @memberof FgList
    */
-  @property({ type: String }) tag?: string;
+  @property({ type: String }) category?: string;
 
   /**
    *　リスト選択の状態を管理するフラグ
@@ -70,7 +70,10 @@ export class FgList extends LitElement {
           <slot @slotchange=${this._handleSlotChange}></slot>
         </div>
       </sl-tooltip>
-      <div class="tag">${this.tag}</div>
+      <div class="category">
+        <sl-icon library="fillgo" name="bookmark"></sl-icon>
+        ${this.category}
+      </div>
     </div>`;
   }
 
