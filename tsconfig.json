@@ -21,10 +21,9 @@
       "@/*": ["src/*"],
       "@assets/*": ["src/assets/*"],
       "@components/*": ["src/components/*"],
-      "@interface/*": ["src/interface/*"],
+      "@interface/*": ["src/models/*"],
       "@plugins/*": ["src/plugins/*"],
-      "@service/*": ["src/service/*"],
-      "@shared/*": ["src/shared/*"]
+      "@service/*": ["src/service/*"]
     }
   },
   "include": ["src"]

@@ -7,7 +7,7 @@ import {
   HTMLTemplateResult,
 } from "lit";
 import { customElement, state, property } from "lit/decorators.js";
-import { emit } from "@shared/event";
+import { emit } from "@/components/shared/event";
 
 import styles from "./fg-list.lit.scss?inline";
 

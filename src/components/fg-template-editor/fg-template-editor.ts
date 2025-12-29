@@ -13,10 +13,9 @@ import {
   query,
   queryAll,
 } from "lit/decorators.js";
-import { emit } from "@shared/event";
 import { extractParams, getTotalFullWidthCount } from "@service/utils";
 import { db, Category } from "@service/db";
-import type { Param } from "@interface/Param";
+import type { Param } from "@/models/Param";
 
 import type SlDialog from "@shoelace-style/shoelace/dist/components/dialog/dialog.js";
 import type SlInput from "@shoelace-style/shoelace/dist/components/input/input.js";
