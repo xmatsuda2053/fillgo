@@ -16,7 +16,7 @@ import type SlDialog from "@shoelace-style/shoelace/dist/components/dialog/dialo
 import type SlInput from "@shoelace-style/shoelace/dist/components/input/input.js";
 import type SlTextarea from "@shoelace-style/shoelace/dist/components/textarea/textarea.js";
 import type SlRadioGroup from "@shoelace-style/shoelace/dist/components/radio-group/radio-group.js";
-import SlButton from "@shoelace-style/shoelace/dist/components/button/button.js";
+import type SlButton from "@shoelace-style/shoelace/dist/components/button/button.js";
 
 import styles from "./fg-template-editor.lit.scss?inline";
 
