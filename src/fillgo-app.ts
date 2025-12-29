@@ -21,6 +21,7 @@ import type SlDrawer from "@shoelace-style/shoelace/dist/components/drawer/drawe
 import type SlDialog from "@shoelace-style/shoelace/dist/components/dialog/dialog.js";
 import type { FgListGroup } from "@components/fg-list-group/fg-list-group";
 import type { FgTemplateEditor } from "@components/fg-template-editor/fg-template-editor";
+import type { FgContents } from "@components/fg-contents/fg-contents";
 import type { Template } from "@/models/Template";
 import type { Category } from "@/models/Category";
 
@@ -62,6 +63,7 @@ export class FillGoApp extends LitElement {
 
   @query("fg-template-editor") templateEditor!: FgTemplateEditor;
   @query("#dialog-delete") dialogDelete!: SlDialog;
+  @query("fg-contents") mainContents!: FgContents;
 
   /**
    * Creates an instance of FillGoApp.
@@ -240,7 +242,7 @@ export class FillGoApp extends LitElement {
           </sl-dialog>
         </div>
         <div class="fg-contents-area">
-          <div class="dummy">test</div>
+          <fg-contents></fg-contents>
         </div>
         <div class="fg-footer-area"></div>
       </div>
@@ -320,5 +322,6 @@ export class FillGoApp extends LitElement {
   private _handleListClick(e: CustomEvent) {
     console.log("_handleListClick");
     console.log(e.detail.listId);
+    this.mainContents.templateId = e.detail.listId;
   }
 }

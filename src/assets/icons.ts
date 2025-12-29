@@ -15,6 +15,10 @@ import svg123 from "@assets/icons/123.svg?raw";
 import calendar3Event from "@assets/icons/calendar3-event.svg?raw";
 import clock from "@assets/icons/clock.svg?raw";
 import bookmark from "@assets/icons/bookmark.svg?raw";
+import eraser from "@assets/icons/eraser.svg?raw";
+import copy from "@assets/icons/copy.svg?raw";
+import telephone from "@assets/icons/telephone.svg?raw";
+
 export const icons: Record<string, string> = {
   list: list,
   download: download,
@@ -33,4 +37,7 @@ export const icons: Record<string, string> = {
   "calendar3-event": calendar3Event,
   clock: clock,
   bookmark: bookmark,
+  eraser: eraser,
+  copy: copy,
+  telephone: telephone,
 };

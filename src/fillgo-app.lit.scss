@@ -10,7 +10,7 @@
 .fg-container {
   display: grid;
   grid-template-rows: 30px 1fr 20px;
-  grid-template-columns: 300px 1fr;
+  grid-template-columns: 320px 1fr;
   grid-template-areas:
     "fg-header-area fg-header-area"
     "fg-list-area fg-contents-area"
@@ -84,9 +84,5 @@
   .fg-footer-area {
     grid-area: fg-footer-area;
     background-color: var(--sl-color-neutral-1000);
-  }
-
-  .dummy {
-    background-color: #00ff00;
   }
 }

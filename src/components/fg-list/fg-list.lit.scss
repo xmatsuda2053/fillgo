@@ -8,6 +8,8 @@
   border-left: var(--sl-spacing-2x-small) solid var(--sl-color-neutral-200);
   transition: box-shadow var(--sl-transition-fast, 0.2s ease);
 
+  margin-right: var(--sl-spacing-2x-small);
+
   &:hover,
   &.is-selected {
     border-color: var(--sl-color-primary-500);

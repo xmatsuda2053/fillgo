@@ -38,7 +38,9 @@ export class FgTemplateEditor extends LitElement {
   @state() private _params: Param[] = [];
   @state() private _selectedCategoryId: number = 0;
 
-  @property({ type: Number }) templateId?: number | undefined = undefined;
+  @property({ type: Number, hasChanged: () => true }) templateId?:
+    | number
+    | undefined = undefined;
 
   /**
    * テンプレートを編集するための画面要素。
@@ -261,6 +263,10 @@ export class FgTemplateEditor extends LitElement {
         <sl-radio-button value="time">
           <sl-icon slot="prefix" library="fillgo" name="clock"></sl-icon>
           時刻
+        </sl-radio-button>
+        <sl-radio-button value="tel">
+          <sl-icon slot="prefix" library="fillgo" name="telephone"></sl-icon>
+          電話番号
         </sl-radio-button>
       </sl-radio-group> `
     )}`;

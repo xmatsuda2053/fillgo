@@ -9,13 +9,19 @@ import {
 import { customElement, state, query } from "lit/decorators.js";
 import { emit } from "@/components/shared/event";
 
+import sharedStyles from "@assets/styles/shared.lit.scss?inline";
 import styles from "./fg-list-group.lit.scss?inline";
 
 @customElement("fg-list-group")
 export class FgListGroup extends LitElement {
-  static styles = css`
-    ${unsafeCSS(styles)}
-  `;
+  static styles = [
+    css`
+      ${unsafeCSS(sharedStyles)}
+    `,
+    css`
+      ${unsafeCSS(styles)}
+    `,
+  ];
 
   /**
    * Creates an instance of FillGoApp.
@@ -54,11 +60,11 @@ export class FgListGroup extends LitElement {
    * @memberof FgListGroup
    */
   protected render(): HTMLTemplateResult {
-    return html`<div class="fg-list-group">
-      <div class="button-group-toolbar">
+    return html`<div class="item-base">
+      <div class="toolbar">
         <sl-button-group label="file">
           <!-- 新規追加 -->
-          <sl-button size="small" @click=${this._handleAddClick}>
+          <sl-button size="small" @click=${this._handleAddClick} outline>
             <sl-icon library="fillgo" name="plus-lg" label="add"></sl-icon>
           </sl-button>
           <!-- 編集 -->
@@ -66,6 +72,7 @@ export class FgListGroup extends LitElement {
             size="small"
             ?disabled=${this._selectedId === ""}
             @click=${this._handleEditClick}
+            outline
           >
             <sl-icon
               library="fillgo"
@@ -75,7 +82,7 @@ export class FgListGroup extends LitElement {
           </sl-button>
           <!-- その他 -->
           <sl-dropdown>
-            <sl-button size="small" slot="trigger">
+            <sl-button size="small" slot="trigger" outline>
               <sl-icon
                 library="fillgo"
                 name="three-dots"
