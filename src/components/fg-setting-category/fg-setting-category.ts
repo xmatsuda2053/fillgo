@@ -7,7 +7,8 @@ import {
   HTMLTemplateResult,
 } from "lit";
 import { customElement, state, query } from "lit/decorators.js";
-import { db, Category } from "@service/db";
+import { db } from "@service/db";
+import { Category } from "@models/Category";
 
 import type SlInput from "@shoelace-style/shoelace/dist/components/input/input.js";
 
