@@ -6,11 +6,18 @@ import {
   PropertyValues,
   HTMLTemplateResult,
 } from "lit";
-import { customElement, state, query, queryAll } from "lit/decorators.js";
+import {
+  customElement,
+  state,
+  property,
+  query,
+  queryAll,
+} from "lit/decorators.js";
 import { extractParams, getTotalFullWidthCount } from "@service/utils";
 import { db } from "@service/db";
 import type { Param } from "@/models/Param";
 import type { Category } from "@/models/Category";
+import type { Template } from "@/models/Template";
 
 import type SlDialog from "@shoelace-style/shoelace/dist/components/dialog/dialog.js";
 import type SlInput from "@shoelace-style/shoelace/dist/components/input/input.js";
@@ -26,16 +33,12 @@ export class FgTemplateEditor extends LitElement {
     ${unsafeCSS(styles)}
   `;
 
+  @state() private _categorys: Category[] = [];
+
   @state() private _params: Param[] = [];
   @state() private _selectedCategoryId: number = 0;
 
-  /**
-   * カテゴリ一覧
-   * @private
-   * @type {Category[]}
-   * @memberof FgSettingCategory
-   */
-  @state() private _categorys: Category[] = [];
+  @property({ type: Number }) templateId?: number = 0;
 
   /**
    * テンプレートを編集するための画面要素。
@@ -86,21 +89,29 @@ export class FgTemplateEditor extends LitElement {
   }
 
   /**
-   * 画面更新前の処理を実行します。
-   * @param _changedProperties
-   */
-  protected willUpdate(_changedProperties: PropertyValues) {
-    this._refresh();
-  }
-
-  /**
    * タグ一覧を取得します。
    * @private
    * @memberof FgSettingCategory
    */
-  private async _refresh() {
+  private async _getCategory() {
     this._categorys = await db.selectCategorys();
   }
+
+  /**
+   * 画面更新前の処理を実行します。
+   * @param _changedProperties
+   */
+  protected willUpdate(_changedProperties: PropertyValues) {
+    this._getCategory();
+    if (
+      _changedProperties.has("templateId") &&
+      this.templateId !== undefined &&
+      this.templateId !== 0
+    ) {
+      console.log("get");
+    }
+  }
+
   /**
    * コンポーネントのメインレイアウトをレンダリングします。
    * ツールバーおよびコンテンツから構成されるリストビューの基本構造を定義します。
@@ -127,7 +138,11 @@ export class FgTemplateEditor extends LitElement {
           <div class="editor-form">${this._renderParamsInput()}</div>
         </sl-tab-panel>
       </sl-tab-group>
-      <sl-button slot="footer" variant="primary">
+      <sl-button
+        slot="footer"
+        variant="primary"
+        @click=${this._handleClickSave}
+      >
         <sl-icon slot="prefix" library="fillgo" name="floppy2-fill"></sl-icon>
         保存
       </sl-button>
@@ -278,7 +293,21 @@ export class FgTemplateEditor extends LitElement {
    * @returns {void}
    */
   private _handleRequestClose(): void {
+    this._init();
     (document.activeElement as HTMLElement)?.blur();
+  }
+
+  /**
+   * 入力内容を初期化します。
+   *
+   * @private
+   * @memberof FgTemplateEditor
+   */
+  private _init(): void {
+    this.inputTitle.value = "";
+    this.inputContent.value = "";
+    this._params = [];
+    this._selectedCategoryId = 0;
   }
 
   /**
@@ -306,6 +335,26 @@ export class FgTemplateEditor extends LitElement {
    */
   private _handleClickCategory(id: number) {
     this._selectedCategoryId = id;
+  }
+
+  /**
+   * 入力内容を保存します。
+   *
+   * @private
+   * @memberof FgTemplateEditor
+   */
+  private async _handleClickSave() {
+    const template: Template = {
+      title: this.inputTitle.value,
+      content: this.inputContent.value,
+      params: this._params,
+      categoryId: this._selectedCategoryId,
+      createdAt: new Date(),
+      updatedAt: new Date(),
+    };
+    await db.insertTemplate(template);
+
+    this.dialogTemplateEditor.hide();
   }
 
   /**

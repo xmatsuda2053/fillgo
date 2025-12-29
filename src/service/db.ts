@@ -1,9 +1,11 @@
 import Dexie, { Table } from "dexie";
 
 import type { Category } from "@/models/Category";
+import type { Template } from "@/models/Template";
 
 export class FillGoDB extends Dexie {
   categorys!: Table<Category>;
+  templates!: Table<Template>;
 
   /**
    * Creates an instance of FillGoDB.
@@ -13,6 +15,7 @@ export class FillGoDB extends Dexie {
     super("FillGoDB");
     this.version(1).stores({
       categorys: "++id, name",
+      templates: "++id, title, categoryId, createdAt, updatedAt",
     });
   }
 
@@ -41,6 +44,15 @@ export class FillGoDB extends Dexie {
    */
   async deleteCategory(id: number) {
     db.categorys.delete(id);
+  }
+
+  /**
+   * テンプレートを新規登録します。
+   * @param t
+   * @returns
+   */
+  async insertTemplate(t: Template): Promise<number> {
+    return await db.templates.add(t);
   }
 }
 export const db = new FillGoDB();
