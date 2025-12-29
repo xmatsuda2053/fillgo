@@ -17,6 +17,12 @@ import type SlDrawer from "@shoelace-style/shoelace/dist/components/drawer/drawe
 import "@components/index";
 import type { FgListGroup } from "@components/fg-list-group/fg-list-group";
 import type { FgTemplateEditor } from "@components/fg-template-editor/fg-template-editor";
+
+import { liveQuery, Subscription } from "dexie";
+import { db } from "@service/db";
+import type { Template } from "@/models/Template";
+import type { Category } from "@/models/Category";
+
 import { icons } from "@assets/icons";
 
 import styles from "./fillgo-app.lit.scss?inline";
@@ -33,6 +39,10 @@ export class FillGoApp extends LitElement {
   static styles = css`
     ${unsafeCSS(styles)}
   `;
+
+  @state() private _templates: Template[] = [];
+  @state() private _categorys: Category[] = [];
+  private _dbSubscription?: Subscription;
 
   /**
    * ドロワーメニュー
@@ -70,6 +80,64 @@ export class FillGoApp extends LitElement {
     });
   }
 
+  /**
+   * コンポーネントがドキュメントの DOM に追加されたときに実行されます。
+   * 基底クラスの処理を呼び出し、IndexedDB のリアルタイム監視を開始します。
+   *
+   * @override
+   * @memberof FillGoApp
+   */
+  connectedCallback() {
+    super.connectedCallback();
+    this._subscribeToDb();
+  }
+
+  /**
+   * コンポーネントがドキュメントの DOM から削除されたときに実行されます。
+   * メモリリークを防止するため、データベースの購読（Subscription）を解除します。
+   *
+   * @override
+   * @memberof FillGoApp
+   */
+  disconnectedCallback() {
+    super.disconnectedCallback();
+    this._dbSubscription?.unsubscribe();
+  }
+
+  /**
+   * IndexedDB の更新を監視し、変更をコンポーネントの状態に同期します。
+   * Dexie.js の liveQuery を使用して、テンプレートとカテゴリのデータが更新されるたびに
+   * 自動的に再レンダリングをトリガーします。
+   *
+   * @private
+   * @returns {void}
+   * @memberof FillGoApp
+   */
+  private _subscribeToDb(): void {
+    const query = liveQuery(async () => {
+      const [templates, categorys] = await Promise.all([
+        db.selectTemplates(),
+        db.selectCategorys(),
+      ]);
+      return { templates, categorys };
+    });
+
+    this._dbSubscription = query.subscribe({
+      next: (data) => {
+        this._templates = data.templates;
+        this._categorys = data.categorys;
+      },
+      error: (err) => console.error("LiveQuery error:", err),
+    });
+  }
+
+  /**
+   * プロパティ変更を検知する。
+   *
+   * @protected
+   * @param {PropertyValues} _changedProperties
+   * @memberof FillGoApp
+   */
   protected willUpdate(_changedProperties: PropertyValues) {}
 
   /**
@@ -138,12 +206,14 @@ export class FillGoApp extends LitElement {
             @clickMenuDelete=${this._handleMenuDeleteClick}
             @clickList=${this._handleListClick}
           >
-            <fg-list listId="1" category="category"
-              >test1test1test1test1test1test1</fg-list
-            >
-            <fg-list listId="1" category="category">test1</fg-list>
-            <fg-list listId="1" category="category">test1</fg-list>
-            <fg-list listId="1" category="category">test1</fg-list>
+            ${this._templates.map(
+              (t) => html`<fg-list
+                listId="${t.id}"
+                category="${this._getCategoryName(t.categoryId!)}"
+              >
+                ${t.title}
+              </fg-list>`
+            )}
           </fg-list-group>
         </div>
         <div class="fg-contents-area">
@@ -153,6 +223,25 @@ export class FillGoApp extends LitElement {
       </div>
       <fg-template-editor></fg-template-editor>
     `;
+  }
+
+  /**
+   * カテゴリIDに対応するカテゴリ名を取得します。
+   * 指定されたIDが見つからない場合や、カテゴリデータが未ロードの場合は '***' を返します。
+   *
+   * @private
+   * @param {number} id - 検索対象のカテゴリID
+   * @returns {string} カテゴリ名、または見つからない場合のデフォルト値
+   * @memberof FillGoApp
+   */
+  private _getCategoryName(id: number): string {
+    const category = this._categorys?.find((c) => c.id === id);
+
+    if (category) {
+      return `${category.name}`;
+    }
+
+    return `***`;
   }
 
   /**
