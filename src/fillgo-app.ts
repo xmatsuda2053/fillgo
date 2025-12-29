@@ -26,7 +26,7 @@ import type { Category } from "@/models/Category";
 import { icons } from "@assets/icons";
 
 import styles from "./fillgo-app.lit.scss?inline";
-import { SlDialog } from "@shoelace-style/shoelace";
+import type SlDialog from "@shoelace-style/shoelace/dist/components/dialog/dialog.js";
 
 setBasePath("/");
 @customElement("fillgo-app")
