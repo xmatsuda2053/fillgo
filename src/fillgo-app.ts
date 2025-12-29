@@ -9,24 +9,22 @@ import {
 import { customElement, state, query } from "lit/decorators.js";
 import { setBasePath } from "@shoelace-style/shoelace/dist/utilities/base-path.js";
 import { registerIconLibrary } from "@shoelace-style/shoelace/dist/utilities/icon-library.js";
+import { liveQuery, Subscription } from "dexie";
+import { db } from "@service/db";
+import { icons } from "@assets/icons";
 
 import "@plugins/shoelace";
 import "@shoelace-style/shoelace/dist/themes/light.css";
-import type SlDrawer from "@shoelace-style/shoelace/dist/components/drawer/drawer.js";
-
 import "@components/index";
+
+import type SlDrawer from "@shoelace-style/shoelace/dist/components/drawer/drawer.js";
+import type SlDialog from "@shoelace-style/shoelace/dist/components/dialog/dialog.js";
 import type { FgListGroup } from "@components/fg-list-group/fg-list-group";
 import type { FgTemplateEditor } from "@components/fg-template-editor/fg-template-editor";
-
-import { liveQuery, Subscription } from "dexie";
-import { db } from "@service/db";
 import type { Template } from "@/models/Template";
 import type { Category } from "@/models/Category";
 
-import { icons } from "@assets/icons";
-
 import styles from "./fillgo-app.lit.scss?inline";
-import type SlDialog from "@shoelace-style/shoelace/dist/components/dialog/dialog.js";
 
 setBasePath("/");
 @customElement("fillgo-app")
