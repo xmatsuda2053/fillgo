@@ -62,14 +62,6 @@ export class FgTemplateEditor extends LitElement {
   @query("#template-content") inputContent!: SlTextarea;
 
   /**
-   * テンプレート内で使用されるパラメータを入力・管理するための要素。
-   * @private
-   * @type {SlInput}
-   * @memberof FgTemplateEditor
-   */
-  @query("#template-params") inputParams!: SlInput;
-
-  /**
    * パラメータ要素のラベルを管理するための要素。
    *
    * @type {SlRadioGroup[]}
@@ -78,7 +70,7 @@ export class FgTemplateEditor extends LitElement {
   @queryAll(".width-manual") paramLabels!: SlRadioGroup[];
 
   /**
-   * カテゴリ洗濯用のボタンを管理するための要素。
+   * カテゴリ選択用のボタンを管理するための要素。
    *
    * @type {SlButton[]}
    * @memberof FgTemplateEditor
