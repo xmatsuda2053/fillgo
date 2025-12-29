@@ -26,6 +26,7 @@ import type { Category } from "@/models/Category";
 import { icons } from "@assets/icons";
 
 import styles from "./fillgo-app.lit.scss?inline";
+import { SlDialog } from "@shoelace-style/shoelace";
 
 setBasePath("/");
 @customElement("fillgo-app")
@@ -42,6 +43,7 @@ export class FillGoApp extends LitElement {
 
   @state() private _templates: Template[] = [];
   @state() private _categorys: Category[] = [];
+  @state() private _deleteTargetId: number = 0;
   private _dbSubscription?: Subscription;
 
   /**
@@ -61,6 +63,7 @@ export class FillGoApp extends LitElement {
   @query("#templateList") templateList!: FgListGroup;
 
   @query("fg-template-editor") templateEditor!: FgTemplateEditor;
+  @query("#dialog-delete") dialogDelete!: SlDialog;
 
   /**
    * Creates an instance of FillGoApp.
@@ -215,6 +218,28 @@ export class FillGoApp extends LitElement {
               </fg-list>`
             )}
           </fg-list-group>
+          <sl-dialog
+            label="確認"
+            id="dialog-delete"
+            @sl-request-close=${this._handleRequestClose}
+          >
+            選択中のテンプレートを削除します。<br />
+            よろしいですか？
+            <sl-button
+              slot="footer"
+              variant="default"
+              @click=${this._handleDeleteYes}
+            >
+              はい
+            </sl-button>
+            <sl-button
+              slot="footer"
+              variant="primary"
+              @click=${this._handleDeleteNo}
+            >
+              いいえ
+            </sl-button>
+          </sl-dialog>
         </div>
         <div class="fg-contents-area">
           <div class="dummy">test</div>
@@ -275,11 +300,23 @@ export class FillGoApp extends LitElement {
    * @param e
    */
   private _handleMenuDeleteClick(e: CustomEvent) {
-    console.log("_handleMenuDeleteClick");
-    console.log(e.detail.listId);
+    this._deleteTargetId = e.detail.listId;
+    this.dialogDelete.show();
   }
+  private async _handleDeleteYes() {
+    await db.deleteTemplate(Number(this._deleteTargetId));
+    this._deleteTargetId = 0;
+    this._handleRequestClose();
+    this.dialogDelete.hide();
+  }
+  private _handleDeleteNo() {
+    this._deleteTargetId = 0;
+    this._handleRequestClose();
+    this.dialogDelete.hide();
+  }
+
   /**
-   * リストクリック時、IDに該当するテンプレートを検索し画面に表示します。。
+   * リストクリック時、IDに該当するテンプレートを検索し画面に表示します。
    * @param e
    */
   private _handleListClick(e: CustomEvent) {

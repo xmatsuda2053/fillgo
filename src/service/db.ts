@@ -88,5 +88,15 @@ export class FillGoDB extends Dexie {
       updatedAt: t.updatedAt,
     });
   }
+
+  /**
+   * 指定したIDのテンプレートを削除します。
+   *
+   * @param {number} id
+   * @memberof FillGoDB
+   */
+  async deleteTemplate(id: number) {
+    await db.templates.delete(id);
+  }
 }
 export const db = new FillGoDB();

@@ -378,6 +378,7 @@ export class FgTemplateEditor extends LitElement {
       await db.insertTemplate(template);
     }
 
+    this._handleRequestClose();
     this.dialogTemplateEditor.hide();
   }
 
