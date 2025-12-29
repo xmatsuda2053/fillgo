@@ -73,5 +73,20 @@ export class FillGoDB extends Dexie {
   async selectTemplateById(id: number): Promise<Template | undefined> {
     return await db.templates.get(id);
   }
+
+  /**
+   * 指定したIDのテンプレートを更新します。
+   * @param id
+   * @param t
+   */
+  async updateTemplate(id: number, t: Template) {
+    await db.templates.update(id, {
+      title: t.title,
+      content: t.content,
+      params: t.params,
+      categoryId: t.categoryId,
+      updatedAt: t.updatedAt,
+    });
+  }
 }
 export const db = new FillGoDB();

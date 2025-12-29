@@ -266,8 +266,8 @@ export class FillGoApp extends LitElement {
    * @param e
    */
   private _handleMenuEditClick(e: CustomEvent) {
-    console.log("_handleMenuEditClick");
-    console.log(e.detail.listId);
+    this.templateEditor.templateId = e.detail.listId;
+    this.templateEditor.show();
   }
 
   /**

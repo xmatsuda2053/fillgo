@@ -38,7 +38,7 @@ export class FgTemplateEditor extends LitElement {
   @state() private _params: Param[] = [];
   @state() private _selectedCategoryId: number = 0;
 
-  @property({ type: Number }) templateId?: number = 0;
+  @property({ type: Number }) templateId?: number | undefined = undefined;
 
   /**
    * テンプレートを編集するための画面要素。
@@ -89,15 +89,6 @@ export class FgTemplateEditor extends LitElement {
   }
 
   /**
-   * タグ一覧を取得します。
-   * @private
-   * @memberof FgSettingCategory
-   */
-  private async _getCategory() {
-    this._categorys = await db.selectCategorys();
-  }
-
-  /**
    * 画面更新前の処理を実行します。
    * @param _changedProperties
    */
@@ -108,8 +99,36 @@ export class FgTemplateEditor extends LitElement {
       this.templateId !== undefined &&
       this.templateId !== 0
     ) {
-      console.log("get");
+      this._getTemplate();
     }
+  }
+
+  /**
+   * タグ一覧を取得します。
+   * @private
+   * @memberof FgSettingCategory
+   */
+  private async _getCategory() {
+    this._categorys = await db.selectCategorys();
+  }
+
+  /**
+   * 指定されたIDに基づいてテンプレートデータを取得し、各フィールドに反映します。
+   *
+   * @private
+   * @returns {Promise<void>}
+   * @memberof FgTemplateEditor
+   */
+  private async _getTemplate(): Promise<void> {
+    if (!this.templateId) return;
+
+    const template = await db.selectTemplateById(Number(this.templateId));
+    if (!template) return;
+
+    this.inputTitle.value = template.title;
+    this.inputContent.value = template.content;
+    this._params = template.params ?? [];
+    this._selectedCategoryId = template.categoryId ?? 0;
   }
 
   /**
@@ -352,7 +371,12 @@ export class FgTemplateEditor extends LitElement {
       createdAt: new Date(),
       updatedAt: new Date(),
     };
-    await db.insertTemplate(template);
+
+    if (this.templateId) {
+      await db.updateTemplate(Number(this.templateId), template);
+    } else {
+      await db.insertTemplate(template);
+    }
 
     this.dialogTemplateEditor.hide();
   }
