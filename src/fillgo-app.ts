@@ -320,8 +320,6 @@ export class FillGoApp extends LitElement {
    * @param e
    */
   private _handleListClick(e: CustomEvent) {
-    console.log("_handleListClick");
-    console.log(e.detail.listId);
     this.mainContents.templateId = e.detail.listId;
   }
 }

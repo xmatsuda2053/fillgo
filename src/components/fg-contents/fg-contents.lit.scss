@@ -27,7 +27,7 @@
 
           &.adjust-icon {
             &::part(suffix) {
-              margin-right: var(--sl-spacing-3x-small);
+              margin-right: var(--sl-spacing-2x-small);
             }
           }
         }
@@ -38,5 +38,19 @@
   .result-area {
     grid-area: result-area;
     padding-left: var(--sl-spacing-x-small);
+
+    .contents {
+      #result {
+        white-space: pre-wrap;
+        font-size: var(--sl-font-size-small);
+
+        .focus {
+          margin: 0;
+          font-weight: var(--sl-font-weight-bold);
+          background-color: var(--sl-color-primary-200);
+          border-radius: 0.2rem;
+        }
+      }
+    }
   }
 }

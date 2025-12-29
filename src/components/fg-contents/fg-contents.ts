@@ -6,13 +6,20 @@ import {
   PropertyValues,
   HTMLTemplateResult,
 } from "lit";
+import { unsafeHTML } from "lit/directives/unsafe-html.js";
 import { customElement, property, state, query } from "lit/decorators.js";
 import { db } from "@service/db";
+import { sanitize } from "@service/utils";
 import type { Template } from "@/models/Template";
 
 import sharedStyles from "@assets/styles/shared.lit.scss?inline";
 import styles from "./fg-contents.lit.scss?inline";
 import { Param } from "@/models/Param";
+
+interface InputParam extends Param {
+  inputText: string;
+  isFocus: boolean;
+}
 
 @customElement("fg-contents")
 export class FgContents extends LitElement {
@@ -30,6 +37,7 @@ export class FgContents extends LitElement {
     | undefined = undefined;
 
   @state() private _template: Template | undefined;
+  @state() private _params: InputParam[] = [];
 
   @query("#parameter-form") parameterForm!: HTMLFormElement;
 
@@ -48,13 +56,14 @@ export class FgContents extends LitElement {
    * @param {PropertyValues} _changedProperties
    * @memberof FgContents
    */
-  protected willUpdate(_changedProperties: PropertyValues) {
+  protected async willUpdate(_changedProperties: PropertyValues) {
     if (
       _changedProperties.has("templateId") &&
       this.templateId !== undefined &&
       this.templateId !== 0
     ) {
-      this._getTemplate();
+      await this._getTemplate();
+      this._initParams();
     }
   }
 
@@ -78,6 +87,17 @@ export class FgContents extends LitElement {
 
   /**
    *
+   */
+  private _initParams() {
+    this._params = (this._template?.params || []).map((param) => ({
+      ...param,
+      inputText: "",
+      isFocus: false,
+    }));
+  }
+
+  /**
+   *
    * @protected
    * @return {*}  {HTMLTemplateResult}
    * @memberof FgList
@@ -92,14 +112,14 @@ export class FgContents extends LitElement {
                 library="fillgo"
                 name="eraser"
                 label="clear"
-                @click=${this._clearParameter}
+                @click=${this._handleClickClear}
               ></sl-icon>
             </sl-button>
           </sl-button-group>
         </div>
         <div class="contents scrollable">
           <form id="parameter-form">
-            ${this._template?.params?.map((p) => this._renderParameter(p))}
+            ${this._params?.map((p, index) => this._renderParameter(p, index))}
           </form>
         </div>
       </div>
@@ -111,7 +131,9 @@ export class FgContents extends LitElement {
             </sl-button>
           </sl-button-group>
         </div>
-        <div class="contents scrollable">contents</div>
+        <div class="contents scrollable">
+          <div id="result">${this._renderResult()}</div>
+        </div>
       </div>
     </div>`;
   }
@@ -120,37 +142,55 @@ export class FgContents extends LitElement {
    *
    *
    * @private
+   * @memberof FgContents
+   */
+  private _handleClickClear() {
+    this.parameterForm.reset();
+    this._initParams();
+  }
+
+  /**
+   *
+   *
+   * @private
    * @param {Param} p
+   * @param {number} index
    * @return {*}  {HTMLTemplateResult}
    * @memberof FgContents
    */
-  private _renderParameter(p: Param): HTMLTemplateResult {
+  private _renderParameter(p: Param, index: number): HTMLTemplateResult {
     const createInput = () => {
       switch (p.type) {
         case "string":
           return html`<sl-textarea
+            id=${index}
             placeholder="${p.value}"
             size="small"
             rows="1"
             resize="auto"
             class="parameter-item"
+            @input=${(e: Event) => this._handleChangeParameter(e, index)}
           >
           </sl-textarea>`;
         case "number":
         case "date":
         case "time":
           return html`<sl-input
+            id=${index}
             placeholder="${p.value}"
             size="small"
             class="parameter-item"
             type="${p.type}"
+            @input=${(e: Event) => this._handleChangeParameter(e, index)}
           ></sl-input>`;
         case "tel":
           return html`<sl-input
+            id=${index}
             placeholder="${p.value}"
             size="small"
             class="parameter-item adjust-icon"
             type="tel"
+            @input=${(e: Event) => this._handleChangeParameter(e, index)}
           >
             <sl-icon slot="suffix" library="fillgo" name="telephone"></sl-icon>
           </sl-input>`;
@@ -168,9 +208,41 @@ export class FgContents extends LitElement {
    *
    *
    * @private
+   * @param {Event} e
+   * @param {number} index
    * @memberof FgContents
    */
-  private _clearParameter() {
-    this.parameterForm.reset();
+  private _handleChangeParameter(e: Event, index: number) {
+    const target = e.target as HTMLInputElement;
+    const value = target.value;
+    this._params = this._params.map((param, i) =>
+      i === index
+        ? { ...param, inputText: value }
+        : { ...param, isFocus: false }
+    );
+    this._params[index].isFocus = true;
+  }
+
+  /**
+   *
+   * @returns
+   */
+  private _renderResult(): HTMLTemplateResult {
+    const replaceText = (str: string): string => {
+      this._params.forEach((p) => {
+        const regex = new RegExp(p.value, "g");
+        const safeInput = sanitize(p.inputText);
+        if (p.isFocus) {
+          str = str.replace(regex, `<span class="focus">${p.value}</span>`);
+        }
+        if (p.inputText !== "") {
+          str = str.replace(regex, safeInput);
+        }
+      });
+      return str;
+    };
+
+    const finalContent = replaceText(this._template?.content ?? "");
+    return html`${unsafeHTML(finalContent)}`;
   }
 }

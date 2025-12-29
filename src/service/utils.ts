@@ -74,3 +74,18 @@ export function getTotalFullWidthCount(str: string): number {
   }
   return Math.ceil(total);
 }
+
+/**
+ * 文字列内のHTML特殊文字をエスケープしてサニタイズします。
+ * @param str サニタイズ対象の文字列
+ */
+export function sanitize(str: string): string {
+  const map: Record<string, string> = {
+    "&": "&amp;",
+    "<": "&lt;",
+    ">": "&gt;",
+    '"': "&quot;",
+    "'": "&#039;",
+  };
+  return str.replace(/[&<>"']/g, (m) => map[m]);
+}
