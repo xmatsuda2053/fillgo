@@ -27,6 +27,7 @@ export class FgTemplateEditor extends LitElement {
   `;
 
   @state() private _params: Param[] = [];
+  @state() private _selectedCategoryId: number = 0;
 
   /**
    * カテゴリ一覧
@@ -182,10 +183,12 @@ export class FgTemplateEditor extends LitElement {
         ${this._categorys.map(
           (f) => html`
             <sl-button
-              variant="default"
+              variant=${this._selectedCategoryId === f.id
+                ? "primary"
+                : "default"}
               size="small"
               class="category-button"
-              @click=${this._handleClickCategory}
+              @click=${() => this._handleClickCategory(f.id!)}
               pill
             >
               ${f.name}
@@ -303,20 +306,14 @@ export class FgTemplateEditor extends LitElement {
   }
 
   /**
-   * クリックしたカテゴリを選択状態とします。
+   * クリックしたカテゴリのIDを取得します。
    *
    * @private
-   * @param {Event} e
+   * @param {number} id
    * @memberof FgTemplateEditor
    */
-  private _handleClickCategory(e: Event) {
-    const clickedButton = e.currentTarget as SlButton;
-
-    this.categoryButtons.forEach((btn) => {
-      btn.variant = "default";
-    });
-
-    clickedButton.variant = "primary";
+  private _handleClickCategory(id: number) {
+    this._selectedCategoryId = id;
   }
 
   /**
