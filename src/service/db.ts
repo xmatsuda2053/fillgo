@@ -1,9 +1,6 @@
 import Dexie, { Table } from "dexie";
 
-export interface Category {
-  id?: number;
-  name: string;
-}
+import type { Category } from "@/models/Category";
 
 export class FillGoDB extends Dexie {
   categorys!: Table<Category>;

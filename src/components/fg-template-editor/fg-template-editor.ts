@@ -6,16 +6,11 @@ import {
   PropertyValues,
   HTMLTemplateResult,
 } from "lit";
-import {
-  customElement,
-  state,
-  property,
-  query,
-  queryAll,
-} from "lit/decorators.js";
+import { customElement, state, query, queryAll } from "lit/decorators.js";
 import { extractParams, getTotalFullWidthCount } from "@service/utils";
-import { db, Category } from "@service/db";
+import { db } from "@service/db";
 import type { Param } from "@/models/Param";
+import type { Category } from "@/models/Category";
 
 import type SlDialog from "@shoelace-style/shoelace/dist/components/dialog/dialog.js";
 import type SlInput from "@shoelace-style/shoelace/dist/components/input/input.js";
