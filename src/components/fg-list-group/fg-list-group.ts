@@ -84,6 +84,7 @@ export class FgListGroup extends LitElement {
             </sl-button>
             <sl-menu>
               <sl-menu-item
+                class="delete"
                 ?disabled=${this._selectedId === ""}
                 @click=${this._handleDeleteClick}
               >

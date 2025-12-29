@@ -25,6 +25,16 @@
         color: var(--sl-color-neutral-300);
       }
     }
+
+    sl-menu {
+      sl-menu-item {
+        &.delete {
+          &::part(base) {
+            color: var(--sl-color-danger-500);
+          }
+        }
+      }
+    }
   }
 
   .contents {
