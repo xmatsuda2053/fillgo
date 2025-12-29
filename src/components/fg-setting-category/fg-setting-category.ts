@@ -7,11 +7,11 @@ import {
   HTMLTemplateResult,
 } from "lit";
 import { customElement, state, query } from "lit/decorators.js";
-import { db, Category } from "../../service/db";
-
-import styles from "./fg-setting-category.lit.scss?inline";
+import { db, Category } from "@service/db";
 
 import type SlInput from "@shoelace-style/shoelace/dist/components/input/input.js";
+
+import styles from "./fg-setting-category.lit.scss?inline";
 
 @customElement("fg-setting-category")
 export class FgSettingCategory extends LitElement {

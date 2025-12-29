@@ -13,18 +13,18 @@ import {
   query,
   queryAll,
 } from "lit/decorators.js";
-import { emit } from "../../shared/event";
-import { extractParams, getTotalFullWidthCount } from "../../service/utils";
-import { db, Category } from "../../service/db";
-import type { Param } from "../../interface/Param";
+import { emit } from "@shared/event";
+import { extractParams, getTotalFullWidthCount } from "@service/utils";
+import { db, Category } from "@service/db";
+import type { Param } from "@interface/Param";
 
 import type SlDialog from "@shoelace-style/shoelace/dist/components/dialog/dialog.js";
 import type SlInput from "@shoelace-style/shoelace/dist/components/input/input.js";
 import type SlTextarea from "@shoelace-style/shoelace/dist/components/textarea/textarea.js";
 import type SlRadioGroup from "@shoelace-style/shoelace/dist/components/radio-group/radio-group.js";
+import SlButton from "@shoelace-style/shoelace/dist/components/button/button.js";
 
 import styles from "./fg-template-editor.lit.scss?inline";
-import { SlButton } from "@shoelace-style/shoelace";
 
 @customElement("fg-template-editor")
 export class FgTemplateEditor extends LitElement {

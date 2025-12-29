@@ -10,75 +10,16 @@ import { customElement, state, query } from "lit/decorators.js";
 import { setBasePath } from "@shoelace-style/shoelace/dist/utilities/base-path.js";
 import { registerIconLibrary } from "@shoelace-style/shoelace/dist/utilities/icon-library.js";
 
-import "./components/fg-setting-category/fg-setting-category";
-import "./components/fg-template-editor/fg-template-editor";
-import "./components/fg-list/fg-list";
-import "./components/fg-list-group/fg-list-group";
-
-import "@shoelace-style/shoelace/dist/components/badge/badge.js";
-import "@shoelace-style/shoelace/dist/components/button/button.js";
-import "@shoelace-style/shoelace/dist/components/button-group/button-group.js";
-import "@shoelace-style/shoelace/dist/components/drawer/drawer.js";
-import "@shoelace-style/shoelace/dist/components/details/details.js";
-import "@shoelace-style/shoelace/dist/components/icon-button/icon-button.js";
-import "@shoelace-style/shoelace/dist/components/tab/tab.js";
-import "@shoelace-style/shoelace/dist/components/tab-group/tab-group.js";
-import "@shoelace-style/shoelace/dist/components/tab-panel/tab-panel.js";
-import "@shoelace-style/shoelace/dist/components/tag/tag.js";
-import "@shoelace-style/shoelace/dist/components/tooltip/tooltip.js";
-import "@shoelace-style/shoelace/dist/components/dropdown/dropdown.js";
-import "@shoelace-style/shoelace/dist/components/menu/menu.js";
-import "@shoelace-style/shoelace/dist/components/menu-item/menu-item.js";
-import "@shoelace-style/shoelace/dist/components/dialog/dialog.js";
-import "@shoelace-style/shoelace/dist/components/input/input.js";
-import "@shoelace-style/shoelace/dist/components/textarea/textarea.js";
-import "@shoelace-style/shoelace/dist/components/radio-button/radio-button.js";
-import "@shoelace-style/shoelace/dist/components/radio-group/radio-group.js";
-
-import type { FgListGroup } from "./components/fg-list-group/fg-list-group";
-import type { FgTemplateEditor } from "./components/fg-template-editor/fg-template-editor";
-
+import "@plugins/shoelace";
+import "@shoelace-style/shoelace/dist/themes/light.css";
 import type SlDrawer from "@shoelace-style/shoelace/dist/components/drawer/drawer.js";
 
-import "@shoelace-style/shoelace/dist/themes/light.css";
-import styles from "./fillgo-app.lit.scss?inline";
+import "@components/index";
+import type { FgListGroup } from "@components/fg-list-group/fg-list-group";
+import type { FgTemplateEditor } from "@components/fg-template-editor/fg-template-editor";
+import { icons } from "@assets/icons";
 
-import list from "./icons/list.svg?raw";
-import download from "./icons/download.svg?raw";
-import upload from "./icons/upload.svg?raw";
-import plusLg from "./icons/plus-lg.svg?raw";
-import filter from "./icons/filter.svg?raw";
-import pencilSquare from "./icons/pencil-square.svg?raw";
-import threeDots from "./icons/three-dots.svg?raw";
-import trash3 from "./icons/trash3.svg?raw";
-import gear from "./icons/gear.svg?raw";
-import database from "./icons/database.svg?raw";
-import infoSquare from "./icons/info-square.svg?raw";
-import floppy2Fill from "./icons/floppy2-fill.svg?raw";
-import fonts from "./icons/fonts.svg?raw";
-import svg123 from "./icons/123.svg?raw";
-import calendar3Event from "./icons/calendar3-event.svg?raw";
-import clock from "./icons/clock.svg?raw";
-import bookmark from "./icons/bookmark.svg?raw";
-const icons: Record<string, string> = {
-  list: list,
-  download: download,
-  upload: upload,
-  "plus-lg": plusLg,
-  filter: filter,
-  "pencil-square": pencilSquare,
-  "three-dots": threeDots,
-  trash3: trash3,
-  gear: gear,
-  database: database,
-  "info-square": infoSquare,
-  "floppy2-fill": floppy2Fill,
-  fonts: fonts,
-  "123": svg123,
-  "calendar3-event": calendar3Event,
-  clock: clock,
-  bookmark: bookmark,
-};
+import styles from "./fillgo-app.lit.scss?inline";
 
 setBasePath("/");
 @customElement("fillgo-app")
