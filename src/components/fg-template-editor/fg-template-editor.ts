@@ -208,21 +208,27 @@ export class FgTemplateEditor extends LitElement {
         </sl-input>
       </div>
       <div class="base-r">
-        ${this._categorys.map(
-          (f) => html`
-            <sl-button
-              variant=${this._selectedCategoryId === f.id
-                ? "primary"
-                : "default"}
-              size="small"
-              class="category-button"
-              @click=${() => this._handleClickCategory(f.id!)}
-              pill
-            >
-              ${f.name}
-            </sl-button>
-          `
-        )}
+        <div class="base-r-header">
+          <sl-icon library="fillgo" name="bookmark"></sl-icon>
+          <span>カテゴリ</span>
+        </div>
+        <div class="base-r-contents">
+          ${this._categorys.map(
+            (f) => html`
+              <sl-button
+                variant=${this._selectedCategoryId === f.id
+                  ? "primary"
+                  : "default"}
+                size="small"
+                class="category-button"
+                @click=${() => this._handleClickCategory(f.id!)}
+                pill
+              >
+                ${f.name}
+              </sl-button>
+            `
+          )}
+        </div>
       </div>
     </div>`;
   }
