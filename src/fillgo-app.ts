@@ -180,11 +180,7 @@ export class FillGoApp extends LitElement {
             <sl-tab-group>
               <sl-tab slot="nav" panel="settings">
                 <sl-icon library="fillgo" name="gear"></sl-icon>
-                Settings
-              </sl-tab>
-              <sl-tab slot="nav" panel="storage">
-                <sl-icon library="fillgo" name="database"></sl-icon>
-                Storage
+                設定
               </sl-tab>
               <sl-tab slot="nav" panel="about">
                 <sl-icon library="fillgo" name="info-square"></sl-icon>
@@ -194,12 +190,18 @@ export class FillGoApp extends LitElement {
                 <div class="group">
                   <div class="group-title">
                     <sl-icon library="fillgo" name="bookmark"></sl-icon>
-                    カテゴリ
+                    カテゴリ管理
                   </div>
                   <fg-setting-category></fg-setting-category>
                 </div>
+                <div class="group">
+                  <div class="group-title">
+                    <sl-icon library="fillgo" name="database"></sl-icon>
+                    データ管理
+                  </div>
+                  <fg-setting-storage></fg-setting-storage>
+                </div>
               </sl-tab-panel>
-              <sl-tab-panel name="storage"> </sl-tab-panel>
               <sl-tab-panel name="about">
                 version:<sl-badge variant="primary">0.0.1</sl-badge>
               </sl-tab-panel>

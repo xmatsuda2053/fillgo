@@ -3,7 +3,7 @@
   height: 100vh;
   width: 100vw;
   font-family: var(--sl-font-mono);
-  background-color: var(--sl-color-neutral-100);
+  background-color: var(--sl-color-neutral-50);
   color: var(--sl-color-neutral-900);
 }
 
@@ -49,6 +49,7 @@
         border: 1px solid var(--sl-color-neutral-300);
         border-radius: var(--sl-spacing-2x-small);
         padding: var(--sl-spacing-large) var(--sl-spacing-small);
+        margin-bottom: var(--sl-spacing-large);
 
         .group-title {
           margin-bottom: var(--sl-spacing-large);

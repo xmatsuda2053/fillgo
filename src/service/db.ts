@@ -2,6 +2,7 @@ import Dexie, { Table } from "dexie";
 
 import type { Category } from "@/models/Category";
 import type { Template } from "@/models/Template";
+import type { ExportData } from "@/models/ExportData";
 
 export class FillGoDB extends Dexie {
   categorys!: Table<Category>;
@@ -118,6 +119,39 @@ export class FillGoDB extends Dexie {
    */
   async deleteTemplate(id: number) {
     await db.templates.delete(id);
+  }
+
+  /**
+   * データベース内のカテゴリとテンプレートのデータを取得し、
+   * エクスポート用のオブジェクトとして返します。
+   *
+   * @returns {Promise<ExportData>} カテゴリとテンプレートを含むエクスポートデータ
+   */
+  async export(): Promise<ExportData> {
+    const exportData: ExportData = {
+      categorys: await db.selectCategorys(),
+      templates: await db.selectTemplates(),
+    };
+
+    return exportData;
+  }
+
+  /**
+   * データベース内のカテゴリとテンプレートのデータを削除し、
+   * 引数のデータをインポートします。
+   *
+   * @param importData カテゴリとテンプレートを含むインポートデータ
+   */
+  async import(importData: ExportData) {
+    await db.transaction("rw", [db.categorys, db.templates], async () => {
+      // 既存データを削除
+      await db.categorys.clear();
+      await db.templates.clear();
+
+      // 新しいデータを一括追加
+      await db.categorys.bulkAdd(importData.categorys);
+      await db.templates.bulkAdd(importData.templates);
+    });
   }
 }
 export const db = new FillGoDB();

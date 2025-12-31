@@ -7,6 +7,7 @@ import copy from "@assets/icons/copy.svg?raw";
 import database from "@assets/icons/database.svg?raw";
 import download from "@assets/icons/download.svg?raw";
 import eraser from "@assets/icons/eraser.svg?raw";
+import exclamationOctagon from "@assets/icons/exclamation-octagon.svg?raw";
 import filter from "@assets/icons/filter.svg?raw";
 import filterSquareFill from "@assets/icons/filter-square-fill.svg?raw";
 import floppy2Fill from "@assets/icons/floppy2-fill.svg?raw";
@@ -21,6 +22,7 @@ import telephone from "@assets/icons/telephone.svg?raw";
 import threeDots from "@assets/icons/three-dots.svg?raw";
 import trash3 from "@assets/icons/trash3.svg?raw";
 import upload from "@assets/icons/upload.svg?raw";
+import xSquare from "@assets/icons/x-square.svg?raw";
 
 export const icons: Record<string, string> = {
   "123": svg123,
@@ -33,6 +35,7 @@ export const icons: Record<string, string> = {
   database: database,
   download: download,
   eraser: eraser,
+  "exclamation-octagon": exclamationOctagon,
   filter: filter,
   "filter-square-fill": filterSquareFill,
   "floppy2-fill": floppy2Fill,
@@ -46,4 +49,5 @@ export const icons: Record<string, string> = {
   "three-dots": threeDots,
   trash3: trash3,
   upload: upload,
+  "x-square": xSquare,
 };

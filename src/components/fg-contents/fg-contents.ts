@@ -305,8 +305,10 @@ export class FgContents extends LitElement {
   private async _handleClickCopy() {
     try {
       await navigator.clipboard.writeText(this._textForCopy);
-      toastSuccess(`<strong>コピーしました</strong><br />
-        クリップボードにテキストを保存しました。`);
+      toastSuccess(
+        "コピーしました",
+        "クリップボードにテキストを保存しました。"
+      );
     } catch (err) {
       console.error("コピーに失敗しました:", err);
     }

@@ -1,24 +1,35 @@
 import type { SlAlert } from "@shoelace-style/shoelace";
 
 /**
- * 日付オブジェクトを指定されたフォーマット（yyyy/MM/dd HH:mm:ss）の文字列に変換します。
+ * 日付オブジェクトを指定されたフォーマットの文字列に変換します。
+ * * 使用可能なトークン: yyyy, MM, dd, HH, mm, ss
  *
  * @export
- * @param {Date} [date] - 変換対象の日付オブジェクト。指定がない場合は空文字を返します。
+ * @param {Date} [date] - 変換対象の日付オブジェクト。
+ * @param {string} [format="yyyy/MM/dd HH:mm:ss"] - フォーマット形式。
  * @returns {string} フォーマット済みの日付文字列、または空文字。
  */
-export function formatDate(date?: Date): string {
+export function formatDate(
+  date?: Date,
+  format: string = "yyyy/MM/dd HH:mm:ss"
+): string {
   if (!date) return "";
+
   const pad = (num: number) => String(num).padStart(2, "0");
 
-  const yyyy = date.getFullYear();
-  const MM = pad(date.getMonth() + 1); // 月は0始まり
-  const dd = pad(date.getDate());
-  const HH = pad(date.getHours());
-  const mm = pad(date.getMinutes());
-  const ss = pad(date.getSeconds());
+  const values: { [key: string]: string | number } = {
+    yyyy: date.getFullYear(),
+    MM: pad(date.getMonth() + 1),
+    dd: pad(date.getDate()),
+    HH: pad(date.getHours()),
+    mm: pad(date.getMinutes()),
+    ss: pad(date.getSeconds()),
+  };
 
-  return `${yyyy}/${MM}/${dd} ${HH}:${mm}:${ss}`;
+  // 正規表現でトークンを一括置換
+  return format.replace(/yyyy|MM|dd|HH|mm|ss/g, (matched) =>
+    values[matched].toString()
+  );
 }
 
 /**
@@ -93,21 +104,73 @@ export function sanitize(str: string): string {
 }
 
 /**
- * 処理成功時のトーストを表示します。
+ * トースト通知を表示するためのベースとなる共通処理です。
  *
- * @export
- * @param {string} innerHtmlText メッセージ内容
+ * @param {string} variant 種類 ("success" | "danger" | "primary" など)
+ * @param {string} iconName 表示するアイコンの名前
+ * @param {string} title タイトル
+ * @param {string} message メッセージ内容
  */
-export function toastSuccess(innerHtmlText: string) {
+function showToast(
+  variant: string,
+  iconName: string,
+  title: string,
+  message: string
+) {
   const alert = Object.assign(document.createElement("sl-alert"), {
-    variant: "success",
+    variant: variant,
     duration: 1500,
     closable: true,
     innerHTML: `
-        <sl-icon slot="icon" library="fillgo" name="check2-circle"></sl-icon>
-        ${innerHtmlText}
+        <sl-icon slot="icon" library="fillgo" name="${iconName}"></sl-icon>
+        <strong>${title}</strong><br />
+        ${message}
       `,
   });
   document.body.append(alert);
   (alert as SlAlert).toast();
+}
+
+/**
+ * 処理成功時のトーストを表示します。
+ *
+ * @export
+ * @param {string} innerTitleText タイトル
+ * @param {string} innerHtmlText メッセージ内容
+ */
+export function toastSuccess(innerTitleText: string, innerHtmlText: string) {
+  showToast("success", "check2-circle", innerTitleText, innerHtmlText);
+}
+
+/**
+ * 処理失敗時のトーストを表示します。
+ *
+ * @export
+ * @param {string} innerTitleText タイトル
+ * @param {string} innerHtmlText メッセージ内容
+ */
+export function toastDanger(innerTitleText: string, innerHtmlText: string) {
+  showToast("danger", "exclamation-octagon", innerTitleText, innerHtmlText);
+}
+
+/**
+ * ファイルをダウンロードする。
+ *
+ * @export
+ * @param {string} strData
+ * @param {string} type
+ * @param {string} fileName
+ */
+export function downloadFile(strData: string, type: string, fileName: string) {
+  const blob = new Blob([strData], { type: type });
+  const url = URL.createObjectURL(blob);
+  const link = document.createElement("a");
+
+  link.href = url;
+  link.download = fileName;
+  document.body.appendChild(link);
+  link.click();
+
+  document.body.removeChild(link);
+  URL.revokeObjectURL(url);
 }
