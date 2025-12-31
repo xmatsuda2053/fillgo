@@ -11,12 +11,14 @@ import { literal, html as staticHtml } from "lit/static-html.js";
 import { unsafeHTML } from "lit/directives/unsafe-html.js";
 import { customElement, property, state, query } from "lit/decorators.js";
 import { db } from "@service/db";
-import { sanitize } from "@service/utils";
+import { sanitize, toastSuccess } from "@service/utils";
 import type { Template } from "@/models/Template";
 
 import sharedStyles from "@assets/styles/shared.lit.scss?inline";
 import styles from "./fg-contents.lit.scss?inline";
 import { Param } from "@/models/Param";
+
+import type { SlAlert } from "@shoelace-style/shoelace";
 
 interface InputParam extends Param {
   inputText: string;
@@ -299,6 +301,8 @@ export class FgContents extends LitElement {
   private async _handleClickCopy() {
     try {
       await navigator.clipboard.writeText(this._textForCopy);
+      toastSuccess(`<strong>コピーしました</strong><br />
+        クリップボードにテキストを保存しました。`);
     } catch (err) {
       console.error("コピーに失敗しました:", err);
     }

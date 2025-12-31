@@ -1,3 +1,5 @@
+import type { SlAlert } from "@shoelace-style/shoelace";
+
 /**
  * 日付オブジェクトを指定されたフォーマット（yyyy/MM/dd HH:mm:ss）の文字列に変換します。
  *
@@ -88,4 +90,24 @@ export function sanitize(str: string): string {
     "'": "&#039;",
   };
   return str.replace(/[&<>"']/g, (m) => map[m]);
+}
+
+/**
+ * 処理成功時のトーストを表示します。
+ *
+ * @export
+ * @param {string} innerHtmlText メッセージ内容
+ */
+export function toastSuccess(innerHtmlText: string) {
+  const alert = Object.assign(document.createElement("sl-alert"), {
+    variant: "success",
+    duration: 1500,
+    closable: true,
+    innerHTML: `
+        <sl-icon slot="icon" library="fillgo" name="check2-circle"></sl-icon>
+        ${innerHtmlText}
+      `,
+  });
+  document.body.append(alert);
+  (alert as SlAlert).toast();
 }
