@@ -384,6 +384,18 @@ export class FgTemplateEditor extends LitElement {
       updatedAt: new Date(),
     };
 
+    if (template.title === "") {
+      this.inputTitle.setCustomValidity("タイトルを入力してください");
+      this.inputTitle.reportValidity();
+      return;
+    }
+
+    if (template.content === "") {
+      this.inputContent.setCustomValidity("内容を入力してください");
+      this.inputContent.reportValidity();
+      return;
+    }
+
     if (this.templateId) {
       await db.updateTemplate(Number(this.templateId), template);
     } else {
