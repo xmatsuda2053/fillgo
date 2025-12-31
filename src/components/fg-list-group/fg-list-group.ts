@@ -188,7 +188,7 @@ export class FgListGroup extends LitElement {
                   label="delete"
                   slot="prefix"
                 ></sl-icon>
-                Delete
+                削除
               </sl-menu-item>
             </sl-menu>
           </sl-dropdown>

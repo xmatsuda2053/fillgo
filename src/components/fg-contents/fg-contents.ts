@@ -118,14 +118,16 @@ export class FgContents extends LitElement {
       <div class="parameter-area item-base">
         <div class="toolbar">
           <sl-button-group label="file">
-            <sl-button size="small" outline>
-              <sl-icon
-                library="fillgo"
-                name="eraser"
-                label="clear"
-                @click=${this._handleClickClear}
-              ></sl-icon>
-            </sl-button>
+            <sl-tooltip content="クリア" placement="bottom-start">
+              <sl-button size="small" outline>
+                <sl-icon
+                  library="fillgo"
+                  name="eraser"
+                  label="clear"
+                  @click=${this._handleClickClear}
+                ></sl-icon>
+              </sl-button>
+            </sl-tooltip>
           </sl-button-group>
         </div>
         <div class="contents scrollable">
@@ -137,14 +139,18 @@ export class FgContents extends LitElement {
       <div class="result-area item-base">
         <div class="toolbar">
           <sl-button-group label="file">
-            <sl-button size="small" outline>
-              <sl-icon
-                library="fillgo"
-                name="clipboard"
-                label="copy"
-                @click=${this._handleClickCopy}
-              ></sl-icon>
-            </sl-button>
+            <sl-tooltip
+              content="クリップボードにコピー"
+              placement="bottom-start"
+            >
+              <sl-button size="small" outline>
+                <sl-icon
+                  library="fillgo"
+                  name="clipboard"
+                  label="copy"
+                  @click=${this._handleClickCopy}
+                ></sl-icon> </sl-button
+            ></sl-tooltip>
           </sl-button-group>
         </div>
         <div class="contents scrollable" @click=${this._handleClickCopy}>
