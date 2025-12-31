@@ -52,10 +52,11 @@ export class FgContents extends LitElement {
   }
 
   /**
-   * 画面更新前の処理を実行します。
+   * コンポーネントの更新ライフサイクル。
+   * templateIdの変更を検知し、データの取得と初期化を行います。
    *
    * @protected
-   * @param {PropertyValues} _changedProperties
+   * @param {PropertyValues} _changedProperties 変更されたプロパティのマップ
    * @memberof FgContents
    */
   protected async willUpdate(_changedProperties: PropertyValues) {
@@ -70,7 +71,7 @@ export class FgContents extends LitElement {
   }
 
   /**
-   * 指定されたIDに基づいてテンプレートデータを取得し、各フィールドに反映します。
+   * DBからテンプレート情報を取得し、内部状態に保存します。
    *
    * @private
    * @returns {Promise<void>}
@@ -88,7 +89,11 @@ export class FgContents extends LitElement {
   }
 
   /**
+   * パラメータ入力状態を初期化します。
+   * フォームのリセットと、テンプレートに基づいた初期パラメータ配列の生成を行います。
    *
+   * @private
+   * @memberof FgContents
    */
   private _initParams() {
     this.parameterForm.reset();
@@ -100,6 +105,7 @@ export class FgContents extends LitElement {
   }
 
   /**
+   * コンポーネントのメインレンダリング処理。
    *
    * @protected
    * @return {*}  {HTMLTemplateResult}
@@ -142,7 +148,8 @@ export class FgContents extends LitElement {
   }
 
   /**
-   *
+   * クリアボタン押下時のハンドラ。
+   * 全てのパラメータ入力を初期状態に戻します。
    *
    * @private
    * @memberof FgContents
@@ -152,12 +159,12 @@ export class FgContents extends LitElement {
   }
 
   /**
-   *
+   * パラメータごとの入力フィールド（sl-input または sl-textarea）をレンダリングします。
    *
    * @private
-   * @param {Param} p
-   * @param {number} index
-   * @return {*}  {HTMLTemplateResult}
+   * @param {Param} p パラメータ定義
+   * @param {number} index パラメータのインデックス
+   * @returns {TemplateResult} 動的タグを含むテンプレート結果
    * @memberof FgContents
    */
   private _renderParameter(p: Param, index: number): TemplateResult {
@@ -206,11 +213,12 @@ export class FgContents extends LitElement {
   }
 
   /**
-   *
+   * 入力値変更時のハンドラ。
+   * 変更された値を状態に反映し、プレビューを更新します。
    *
    * @private
-   * @param {Event} e
-   * @param {number} index
+   * @param {Event} e 入力イベント
+   * @param {number} index パラメータのインデックス
    * @memberof FgContents
    */
   private _handleChangeParameter(e: Event, index: number) {
@@ -225,10 +233,11 @@ export class FgContents extends LitElement {
   }
 
   /**
-   *
+   * フォーカス取得時のハンドラ。
+   * プレビュー領域で該当するキーワードを強調表示するために状態を更新します。
    *
    * @private
-   * @param {number} index
+   * @param {number} index パラメータのインデックス
    * @memberof FgContents
    */
   private _handleFocusParameter(index: number) {
@@ -238,7 +247,8 @@ export class FgContents extends LitElement {
   }
 
   /**
-   *
+   * フォーカス外れ時のハンドラ。
+   * 強調表示を解除します。
    *
    * @private
    * @memberof FgContents
@@ -248,8 +258,10 @@ export class FgContents extends LitElement {
   }
 
   /**
+   * テンプレート内のキーワードを入力値で置換し、プレビュー結果をレンダリングします。
+   * セキュリティのため入力値はサニタイズ処理されます。
    *
-   * @returns
+   * @returns {HTMLTemplateResult} サニタイズ済みのHTMLを含むテンプレート
    */
   private _renderResult(): HTMLTemplateResult {
     const replaceText = (str: string): string => {
