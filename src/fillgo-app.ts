@@ -206,6 +206,7 @@ export class FillGoApp extends LitElement {
             id="templateList"
             @clickMenuAdd=${this._handleMenuAddClick}
             @clickMenuEdit=${this._handleMenuEditClick}
+            @clickMenuCopy=${this._handleMenuCopyClick}
             @clickMenuDelete=${this._handleMenuDeleteClick}
             @clickList=${this._handleListClick}
           >
@@ -293,6 +294,14 @@ export class FillGoApp extends LitElement {
   private _handleMenuEditClick(e: CustomEvent) {
     this.templateEditor.templateId = e.detail.listId;
     this.templateEditor.show();
+  }
+
+  /**
+   * 選択中のリストを複製します。
+   * @param e
+   */
+  private _handleMenuCopyClick(e: CustomEvent) {
+    db.copyTemplate(Number(e.detail.listId));
   }
 
   /**

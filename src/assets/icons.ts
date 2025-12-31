@@ -1,6 +1,7 @@
 import bookmark from "@assets/icons/bookmark.svg?raw";
 import calendar3Event from "@assets/icons/calendar3-event.svg?raw";
 import check2Circle from "@assets/icons/check2-circle.svg?raw";
+import clipboard from "@assets/icons/clipboard.svg?raw";
 import clock from "@assets/icons/clock.svg?raw";
 import copy from "@assets/icons/copy.svg?raw";
 import database from "@assets/icons/database.svg?raw";
@@ -25,6 +26,7 @@ export const icons: Record<string, string> = {
   bookmark: bookmark,
   "calendar3-event": calendar3Event,
   "check2-circle": check2Circle,
+  clipboard: clipboard,
   clock: clock,
   copy: copy,
   database: database,

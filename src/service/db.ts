@@ -90,6 +90,27 @@ export class FillGoDB extends Dexie {
   }
 
   /**
+   * 指定したIDのテンプレートを複製します。
+   *
+   * @param {number} id
+   * @memberof FillGoDB
+   */
+  async copyTemplate(id: number) {
+    const t: Template | undefined = await this.selectTemplateById(id);
+    if (!t) return;
+
+    const copyT: Template = {
+      ...t,
+      id: undefined,
+      title: `copy~${t.title}`,
+      createdAt: new Date(),
+      updatedAt: new Date(),
+    };
+
+    await this.insertTemplate(copyT);
+  }
+
+  /**
    * 指定したIDのテンプレートを削除します。
    *
    * @param {number} id

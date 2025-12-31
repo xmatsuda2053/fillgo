@@ -140,7 +140,7 @@ export class FgContents extends LitElement {
             <sl-button size="small" outline>
               <sl-icon
                 library="fillgo"
-                name="copy"
+                name="clipboard"
                 label="copy"
                 @click=${this._handleClickCopy}
               ></sl-icon>

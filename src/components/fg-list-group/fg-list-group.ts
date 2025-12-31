@@ -63,24 +63,35 @@ export class FgListGroup extends LitElement {
     return html`<div class="item-base">
       <div class="toolbar">
         <sl-button-group label="file">
-          <!-- 新規追加 -->
-          <sl-button size="small" @click=${this._handleAddClick} outline>
-            <sl-icon library="fillgo" name="plus-lg" label="add"></sl-icon>
-          </sl-button>
-          <!-- 編集 -->
-          <sl-button
-            size="small"
-            ?disabled=${this._selectedId === ""}
-            @click=${this._handleEditClick}
-            outline
-          >
-            <sl-icon
-              library="fillgo"
-              name="pencil-square"
-              label="edit"
-            ></sl-icon>
-          </sl-button>
-          <!-- その他 -->
+          <sl-tooltip content="新規追加" placement="bottom-start">
+            <sl-button size="small" @click=${this._handleAddClick} outline>
+              <sl-icon library="fillgo" name="plus-lg" label="add"></sl-icon>
+            </sl-button>
+          </sl-tooltip>
+          <sl-tooltip content="編集" placement="bottom-start">
+            <sl-button
+              size="small"
+              ?disabled=${this._selectedId === ""}
+              @click=${this._handleEditClick}
+              outline
+            >
+              <sl-icon
+                library="fillgo"
+                name="pencil-square"
+                label="edit"
+              ></sl-icon>
+            </sl-button>
+          </sl-tooltip>
+          <sl-tooltip content="コピー" placement="bottom-start">
+            <sl-button
+              size="small"
+              ?disabled=${this._selectedId === ""}
+              @click=${this._handleCopyClick}
+              outline
+            >
+              <sl-icon library="fillgo" name="copy" label="copy"></sl-icon>
+            </sl-button>
+          </sl-tooltip>
           <sl-dropdown>
             <sl-button size="small" slot="trigger" outline>
               <sl-icon
@@ -131,6 +142,16 @@ export class FgListGroup extends LitElement {
    */
   private _handleEditClick() {
     emit(this, "clickMenuEdit", { detail: { listId: this._selectedId } });
+  }
+
+  /**
+   * コピーイベントを発行する。
+   *
+   * @private
+   * @memberof FgListGroup
+   */
+  private _handleCopyClick() {
+    emit(this, "clickMenuCopy", { detail: { listId: this._selectedId } });
   }
 
   /**
