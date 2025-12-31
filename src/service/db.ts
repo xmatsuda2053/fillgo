@@ -153,5 +153,17 @@ export class FillGoDB extends Dexie {
       await db.templates.bulkAdd(importData.templates);
     });
   }
+
+  /**
+   * テーブル内容をすべて削除します。
+   *
+   * @memberof FillGoDB
+   */
+  async initialize() {
+    await db.transaction("rw", [db.categorys, db.templates], async () => {
+      await db.categorys.clear();
+      await db.templates.clear();
+    });
+  }
 }
 export const db = new FillGoDB();

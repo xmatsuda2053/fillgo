@@ -15,6 +15,7 @@ import {
   toastDanger,
 } from "@/service/utils";
 import { ExportData } from "@/models/ExportData";
+import type SlDialog from "@shoelace-style/shoelace/dist/components/dialog/dialog.js";
 
 import styles from "./fg-setting-storage.lit.scss?inline";
 
@@ -25,7 +26,7 @@ export class FgSettingStorage extends LitElement {
   `;
 
   @query("#import") import!: HTMLInputElement;
-
+  @query("#dialog-initialize") dialogInitialize!: SlDialog;
   /**
    * Creates an instance of FillGoApp.
    * @memberof FillGoApp
@@ -58,7 +59,7 @@ export class FgSettingStorage extends LitElement {
           <sl-icon library="fillgo" name="upload" slot="prefix"></sl-icon>
           インポート
         </sl-menu-item>
-        <sl-menu-item value="initialize">
+        <sl-menu-item value="initialize" @click=${this._handleClickInitialize}>
           <sl-icon
             library="fillgo"
             name="x-square"
@@ -74,7 +75,29 @@ export class FgSettingStorage extends LitElement {
         class="hidden"
         accept=".json"
         @change=${this._handleChangeImport}
-      />`;
+      />
+      <sl-dialog
+        label="確認"
+        id="dialog-initialize"
+        @sl-request-close=${this._handleRequestClose}
+      >
+        登録されたデータをすべて削除します。<br />
+        よろしいですか？
+        <sl-button
+          slot="footer"
+          variant="default"
+          @click=${this._handleInitializeYes}
+        >
+          はい
+        </sl-button>
+        <sl-button
+          slot="footer"
+          variant="primary"
+          @click=${this._handleInitializeNo}
+        >
+          いいえ
+        </sl-button>
+      </sl-dialog>`;
   }
 
   /**
@@ -137,5 +160,49 @@ export class FgSettingStorage extends LitElement {
       );
       console.log("import failed:", error);
     }
+  }
+
+  /**
+   * 閉じるリクエストを処理し、ドキュメント内のアクティブなフォーカスを解除します。
+   *
+   * @private
+   * @returns {void}
+   */
+  private _handleRequestClose(): void {
+    (document.activeElement as HTMLElement)?.blur();
+  }
+
+  /**
+   * テーブルデータ初期化を開始します。
+   *
+   * @private
+   * @memberof FgSettingStorage
+   */
+  private _handleClickInitialize() {
+    this.dialogInitialize.show();
+  }
+
+  /**
+   * 初期化を実行する。
+   *
+   * @private
+   * @memberof FgSettingStorage
+   */
+  private async _handleInitializeYes() {
+    await db.initialize();
+    this._handleRequestClose();
+    this.dialogInitialize.hide();
+    toastSuccess("初期化しました", "登録データの全削除が完了しました。");
+  }
+
+  /**
+   * 初期化を中断する。
+   *
+   * @private
+   * @memberof FgSettingStorage
+   */
+  private _handleInitializeNo() {
+    this._handleRequestClose();
+    this.dialogInitialize.hide();
   }
 }
