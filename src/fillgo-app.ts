@@ -172,7 +172,7 @@ export class FillGoApp extends LitElement {
           </sl-icon-button>
           <sl-drawer
             id="fillgo-drawer-menu"
-            label="FillGo"
+            label="Menu"
             placement="start"
             class="drawer-placement-start"
             @sl-request-close=${this._handleRequestClose}
@@ -203,11 +203,11 @@ export class FillGoApp extends LitElement {
                 </div>
               </sl-tab-panel>
               <sl-tab-panel name="about">
-                version:<sl-badge variant="primary">0.0.1</sl-badge>
+                <fg-about></fg-about>
               </sl-tab-panel>
             </sl-tab-group>
           </sl-drawer>
-          <span class="app-name">FillGo</span>
+          <span class="header-text">FillGo</span>
         </div>
         <div class="fg-list-area">
           <fg-list-group

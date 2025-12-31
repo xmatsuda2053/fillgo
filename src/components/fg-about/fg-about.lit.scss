@@ -1,0 +1,29 @@
+.app-name {
+  display: flex;
+  align-items: center;
+  gap: var(--sl-spacing-x-small);
+
+  margin-bottom: var(--sl-spacing-medium);
+
+  svg {
+    width: var(--sl-font-size-2x-large);
+    height: var(--sl-font-size-2x-large);
+  }
+  span {
+    font-size: var(--sl-font-size-2x-large);
+    font-weight: var(--sl-font-weight-bold);
+  }
+}
+
+.description-area {
+  display: flex;
+  margin-bottom: var(--sl-spacing-2x-small);
+
+  .text {
+    width: 100px;
+  }
+
+  .badge {
+    flex-grow: 1;
+  }
+}
