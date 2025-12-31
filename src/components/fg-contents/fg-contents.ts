@@ -5,7 +5,9 @@ import {
   unsafeCSS,
   PropertyValues,
   HTMLTemplateResult,
+  TemplateResult,
 } from "lit";
+import { literal, html as staticHtml } from "lit/static-html.js";
 import { unsafeHTML } from "lit/directives/unsafe-html.js";
 import { customElement, property, state, query } from "lit/decorators.js";
 import { db } from "@service/db";
@@ -158,50 +160,49 @@ export class FgContents extends LitElement {
    * @return {*}  {HTMLTemplateResult}
    * @memberof FgContents
    */
-  private _renderParameter(p: Param, index: number): HTMLTemplateResult {
-    const createInput = () => {
-      switch (p.type) {
-        case "string":
-          return html`<sl-textarea
-            id=${index}
-            placeholder="${p.value}"
-            size="small"
-            rows="1"
-            resize="auto"
-            class="parameter-item"
-            @input=${(e: Event) => this._handleChangeParameter(e, index)}
-          >
-          </sl-textarea>`;
-        case "number":
-        case "date":
-        case "time":
-          return html`<sl-input
-            id=${index}
-            placeholder="${p.value}"
-            size="small"
-            class="parameter-item"
-            type="${p.type}"
-            @input=${(e: Event) => this._handleChangeParameter(e, index)}
-          ></sl-input>`;
-        case "tel":
-          return html`<sl-input
-            id=${index}
-            placeholder="${p.value}"
-            size="small"
-            class="parameter-item adjust-icon"
-            type="tel"
-            @input=${(e: Event) => this._handleChangeParameter(e, index)}
-          >
-            <sl-icon slot="suffix" library="fillgo" name="telephone"></sl-icon>
-          </sl-input>`;
-        default:
-          return html``;
-      }
+  private _renderParameter(p: Param, index: number): TemplateResult {
+    const isTextarea = p.type === "string";
+    const tag = isTextarea ? literal`sl-textarea` : literal`sl-input`;
+
+    const commonProps = {
+      id: index,
+      placeholder: p.value,
+      size: "small" as const,
+      class: `parameter-item ${p.type === "tel" ? "adjust-icon" : ""}`,
+      type: isTextarea ? undefined : p.type,
+      rows: isTextarea ? "1" : undefined,
+      resize: isTextarea ? "auto" : undefined,
+      onInput: (e: Event) => this._handleChangeParameter(e, index),
+      onFocus: () => this._handleFocusParameter(index),
+      onBlur: this._handleBlurParameter,
     };
 
-    return html`<sl-tooltip content="${p.value}" placement="left-start">
-      ${createInput()}
-    </sl-tooltip>`;
+    return staticHtml`
+      <sl-tooltip content="${p.value}" placement="left-start">
+        <${tag}
+          id=${commonProps.id}
+          placeholder="${commonProps.placeholder}"
+          size=${commonProps.size}
+          class=${commonProps.class}
+          type=${commonProps.type}
+          rows=${commonProps.rows}
+          resize=${commonProps.resize}
+          @input=${commonProps.onInput}
+          @focus=${commonProps.onFocus}
+          @blur=${commonProps.onBlur}
+        >
+          ${
+            p.type === "tel"
+              ? html`<sl-icon
+                  slot="suffix"
+                  library="fillgo"
+                  name="telephone"
+                ></sl-icon>`
+              : ""
+          }
+        </${tag}>
+      </sl-tooltip>
+    `;
   }
 
   /**
@@ -221,6 +222,29 @@ export class FgContents extends LitElement {
         : { ...param, isFocus: false }
     );
     this._params[index].isFocus = true;
+  }
+
+  /**
+   *
+   *
+   * @private
+   * @param {number} index
+   * @memberof FgContents
+   */
+  private _handleFocusParameter(index: number) {
+    this._params = this._params.map((param, i) =>
+      i === index ? { ...param, isFocus: true } : { ...param, isFocus: false }
+    );
+  }
+
+  /**
+   *
+   *
+   * @private
+   * @memberof FgContents
+   */
+  private _handleBlurParameter() {
+    this._params = this._params.map((param) => ({ ...param, isFocus: false }));
   }
 
   /**
