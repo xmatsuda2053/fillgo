@@ -18,8 +18,6 @@ import sharedStyles from "@assets/styles/shared.lit.scss?inline";
 import styles from "./fg-contents.lit.scss?inline";
 import { Param } from "@/models/Param";
 
-import type { SlAlert } from "@shoelace-style/shoelace";
-
 interface InputParam extends Param {
   inputText: string;
   isFocus: boolean;
