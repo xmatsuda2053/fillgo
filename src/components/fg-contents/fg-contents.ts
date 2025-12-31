@@ -40,6 +40,7 @@ export class FgContents extends LitElement {
 
   @state() private _template: Template | undefined;
   @state() private _params: InputParam[] = [];
+  @state() private _textForCopy: string = "";
 
   @query("#parameter-form") parameterForm!: HTMLFormElement;
 
@@ -66,7 +67,7 @@ export class FgContents extends LitElement {
       this.templateId !== 0
     ) {
       await this._getTemplate();
-      this._initParams();
+      this._init();
     }
   }
 
@@ -90,18 +91,19 @@ export class FgContents extends LitElement {
 
   /**
    * パラメータ入力状態を初期化します。
-   * フォームのリセットと、テンプレートに基づいた初期パラメータ配列の生成を行います。
+   * フォームのリセットと、テンプレートに基づいた初期パラメータ配列の生成、コピー用テキストの初期化を行います。
    *
    * @private
    * @memberof FgContents
    */
-  private _initParams() {
+  private _init() {
     this.parameterForm.reset();
     this._params = (this._template?.params || []).map((param) => ({
       ...param,
       inputText: "",
       isFocus: false,
     }));
+    this._textForCopy = "";
   }
 
   /**
@@ -136,11 +138,16 @@ export class FgContents extends LitElement {
         <div class="toolbar">
           <sl-button-group label="file">
             <sl-button size="small" outline>
-              <sl-icon library="fillgo" name="copy" label="copy"></sl-icon>
+              <sl-icon
+                library="fillgo"
+                name="copy"
+                label="copy"
+                @click=${this._handleClickCopy}
+              ></sl-icon>
             </sl-button>
           </sl-button-group>
         </div>
-        <div class="contents scrollable">
+        <div class="contents scrollable" @click=${this._handleClickCopy}>
           <div id="result">${this._renderResult()}</div>
         </div>
       </div>
@@ -155,7 +162,7 @@ export class FgContents extends LitElement {
    * @memberof FgContents
    */
   private _handleClickClear() {
-    this._initParams();
+    this._init();
   }
 
   /**
@@ -264,11 +271,11 @@ export class FgContents extends LitElement {
    * @returns {HTMLTemplateResult} サニタイズ済みのHTMLを含むテンプレート
    */
   private _renderResult(): HTMLTemplateResult {
-    const replaceText = (str: string): string => {
+    const replaceText = (str: string, isDisplay: boolean): string => {
       this._params.forEach((p) => {
         const regex = new RegExp(p.value, "g");
         const safeInput = sanitize(p.inputText);
-        if (p.isFocus) {
+        if (isDisplay && p.isFocus) {
           str = str.replace(regex, `<span class="focus">${p.value}</span>`);
         }
         if (p.inputText !== "") {
@@ -278,7 +285,22 @@ export class FgContents extends LitElement {
       return str;
     };
 
-    const finalContent = replaceText(this._template?.content ?? "");
+    const finalContent = replaceText(this._template?.content ?? "", true);
+    this._textForCopy = replaceText(this._template?.content ?? "", false);
     return html`${unsafeHTML(finalContent)}`;
+  }
+
+  /**
+   * 生成結果クリックのハンドラ。
+   *
+   * @private
+   * @memberof FgContents
+   */
+  private async _handleClickCopy() {
+    try {
+      await navigator.clipboard.writeText(this._textForCopy);
+    } catch (err) {
+      console.error("コピーに失敗しました:", err);
+    }
   }
 }

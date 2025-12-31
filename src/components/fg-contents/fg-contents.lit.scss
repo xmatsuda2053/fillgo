@@ -38,6 +38,7 @@
   .result-area {
     grid-area: result-area;
     padding-left: var(--sl-spacing-x-small);
+    cursor: pointer;
 
     .contents {
       #result {
@@ -51,6 +52,10 @@
           border-radius: 0.2rem;
         }
       }
+    }
+
+    &:hover {
+      color: var(--sl-color-primary-800);
     }
   }
 }
