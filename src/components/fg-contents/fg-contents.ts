@@ -89,6 +89,7 @@ export class FgContents extends LitElement {
    *
    */
   private _initParams() {
+    this.parameterForm.reset();
     this._params = (this._template?.params || []).map((param) => ({
       ...param,
       inputText: "",
@@ -145,7 +146,6 @@ export class FgContents extends LitElement {
    * @memberof FgContents
    */
   private _handleClickClear() {
-    this.parameterForm.reset();
     this._initParams();
   }
 
