@@ -24,6 +24,7 @@ import type { FgTemplateEditor } from "@components/fg-template-editor/fg-templat
 import type { FgContents } from "@components/fg-contents/fg-contents";
 import type { Template } from "@/models/Template";
 import type { Category } from "@/models/Category";
+import type { Filter } from "@/components/fg-list-group/fg-list-group";
 
 import styles from "./fillgo-app.lit.scss?inline";
 
@@ -42,6 +43,7 @@ export class FillGoApp extends LitElement {
 
   @state() private _templates: Template[] = [];
   @state() private _categorys: Category[] = [];
+  @state() private _filters: Filter[] = [];
   @state() private _deleteTargetId: number = 0;
   private _dbSubscription?: Subscription;
 
@@ -129,6 +131,10 @@ export class FillGoApp extends LitElement {
       next: (data) => {
         this._templates = data.templates;
         this._categorys = data.categorys;
+        this._filters = this._categorys.map((c) => ({
+          id: c.id ?? 0,
+          name: c.name,
+        }));
       },
       error: (err) => console.error("LiveQuery error:", err),
     });
@@ -204,6 +210,7 @@ export class FillGoApp extends LitElement {
         <div class="fg-list-area">
           <fg-list-group
             id="templateList"
+            .filters=${this._filters}
             @clickMenuAdd=${this._handleMenuAddClick}
             @clickMenuEdit=${this._handleMenuEditClick}
             @clickMenuCopy=${this._handleMenuCopyClick}
@@ -214,6 +221,7 @@ export class FillGoApp extends LitElement {
               (t) => html`<fg-list
                 listId="${t.id}"
                 category="${this._getCategoryName(t.categoryId!)}"
+                categoryId="${t.categoryId!}"
               >
                 ${t.title}
               </fg-list>`

@@ -8,6 +8,7 @@ import database from "@assets/icons/database.svg?raw";
 import download from "@assets/icons/download.svg?raw";
 import eraser from "@assets/icons/eraser.svg?raw";
 import filter from "@assets/icons/filter.svg?raw";
+import filterSquareFill from "@assets/icons/filter-square-fill.svg?raw";
 import floppy2Fill from "@assets/icons/floppy2-fill.svg?raw";
 import fonts from "@assets/icons/fonts.svg?raw";
 import gear from "@assets/icons/gear.svg?raw";
@@ -33,6 +34,7 @@ export const icons: Record<string, string> = {
   download: download,
   eraser: eraser,
   filter: filter,
+  "filter-square-fill": filterSquareFill,
   "floppy2-fill": floppy2Fill,
   fonts: fonts,
   gear: gear,

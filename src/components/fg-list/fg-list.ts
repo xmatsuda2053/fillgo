@@ -19,6 +19,8 @@ export class FgList extends LitElement {
 
   @state() private _tooltipContent: string = "";
 
+  @state() private _visibility: boolean = true;
+
   /**
    * Creates an instance of FillGoApp.
    * @memberof FillGoApp
@@ -44,6 +46,14 @@ export class FgList extends LitElement {
   @property({ type: String }) category?: string;
 
   /**
+   * リストのカテゴリID
+   *
+   * @type {string}
+   * @memberof FgList
+   */
+  @property({ type: Number }) categoryId?: number;
+
+  /**
    *　リスト選択の状態を管理するフラグ
    *
    * @memberof FgList
@@ -62,7 +72,9 @@ export class FgList extends LitElement {
    */
   protected render(): HTMLTemplateResult {
     return html`<div
-      class="fg-list ${this.selected ? "is-selected" : ""}"
+      class="fg-list 
+      ${this.selected ? "is-selected" : ""} 
+      ${this._visibility ? "" : "hidden"}"
       @click=${() => this._handleClick(this.listId)}
     >
       <sl-tooltip content=${this._tooltipContent} placement="right-start">
@@ -107,5 +119,34 @@ export class FgList extends LitElement {
   private _handleClick(id?: string) {
     this.selected = true;
     emit(this, "clickList", { detail: { item: this, listId: id } });
+  }
+
+  /**
+   * カテゴリIDと一致するか判定する。
+   *
+   * @param {number} id
+   * @return {*}  {boolean}
+   * @memberof FgList
+   */
+  public compareCategoryId(id: number): boolean {
+    return this.categoryId === id;
+  }
+
+  /**
+   * 要素を表示する。
+   *
+   * @memberof FgList
+   */
+  public show() {
+    this._visibility = true;
+  }
+
+  /**
+   * 要素を非表示にする。
+   *
+   * @memberof FgList
+   */
+  public hide() {
+    this._visibility = false;
   }
 }

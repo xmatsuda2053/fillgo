@@ -9,6 +9,7 @@
   transition: box-shadow var(--sl-transition-fast, 0.2s ease);
 
   margin-right: var(--sl-spacing-2x-small);
+  margin-bottom: var(--sl-spacing-x-small);
 
   &:hover,
   &.is-selected {
@@ -42,5 +43,9 @@
       font-size: var(--sl-font-size-2x-small);
       margin-top: -1px;
     }
+  }
+
+  &.hidden {
+    display: none;
   }
 }
