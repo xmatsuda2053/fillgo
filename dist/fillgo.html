@@ -3537,7 +3537,7 @@
       </div>
     </div>`}_handleAddCategory(){const t={name:this.newCategory.value};if(t.name===""){this.newCategory.setCustomValidity("カテゴリ名を入力してください"),this.newCategory.reportValidity();return}if(this._categorys.map(e=>e.name).includes(t.name)){this.newCategory.setCustomValidity("登録済みのカテゴリ名です"),this.newCategory.reportValidity();return}ot.insertCategory(t),this.newCategory.value=""}_handleRemoveCategory(t){ot.deleteCategory(t)}};xn.styles=st`
     ${ve(Qd)}
-  `;Ji([pt()],xn.prototype,"_categorys",2);Ji([Y("#new-category")],xn.prototype,"newCategory",2);xn=Ji([Je("fg-setting-category")],xn);function th(t,e="yyyy/MM/dd HH:mm:ss"){if(!t)return"";const n=a=>String(a).padStart(2,"0"),i={yyyy:t.getFullYear(),MM:n(t.getMonth()+1),dd:n(t.getDate()),HH:n(t.getHours()),mm:n(t.getMinutes()),ss:n(t.getSeconds())};return e.replace(/yyyy|MM|dd|HH|mm|ss/g,a=>i[a].toString())}function eh(t){const e=/{[^}]+}/g;return[...new Set(t.match(e)||[])]}function rh(t){const e=t.charCodeAt(0);return e>=0&&e<=127||e>=65377&&e<=65439}function nh(t){if(!t)return 0;let e=0;for(const n of t)e+=rh(n)?.5:1;return Math.ceil(e)}function oh(t){const e={"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#039;"};return t.replace(/[&<>"']/g,n=>e[n])}function Xa(t,e,n,i){const a=Object.assign(document.createElement("sl-alert"),{variant:t,duration:1500,closable:!0,innerHTML:`
+  `;Ji([pt()],xn.prototype,"_categorys",2);Ji([Y("#new-category")],xn.prototype,"newCategory",2);xn=Ji([Je("fg-setting-category")],xn);function th(t,e="yyyy/MM/dd HH:mm:ss"){if(!t)return"";const n=a=>String(a).padStart(2,"0"),i={yyyy:t.getFullYear(),MM:n(t.getMonth()+1),dd:n(t.getDate()),HH:n(t.getHours()),mm:n(t.getMinutes()),ss:n(t.getSeconds())};return e.replace(/yyyy|MM|dd|HH|mm|ss/g,a=>i[a].toString())}function eh(t){const e=/{{[^}]+}}/g;return[...new Set(t.match(e)||[])]}function rh(t){const e=t.charCodeAt(0);return e>=0&&e<=127||e>=65377&&e<=65439}function nh(t){if(!t)return 0;let e=0;for(const n of t)e+=rh(n)?.5:1;return Math.ceil(e)}function oh(t){const e={"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#039;"};return t.replace(/[&<>"']/g,n=>e[n])}function Xa(t,e,n,i){const a=Object.assign(document.createElement("sl-alert"),{variant:t,duration:1500,closable:!0,innerHTML:`
         <sl-icon slot="icon" library="fillgo" name="${e}"></sl-icon>
         <strong>${n}</strong><br />
         ${i}
@@ -3632,6 +3632,7 @@
           placeholder="e.g. {所属} の {氏名} さんから次の通り連絡がありました。"
           size="small"
           resize="none"
+          spellcheck="false"
           @input=${this._handleInputTemplateContents}
         ></sl-textarea>
         <sl-input

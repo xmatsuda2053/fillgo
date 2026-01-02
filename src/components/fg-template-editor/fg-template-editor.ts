@@ -195,6 +195,7 @@ export class FgTemplateEditor extends LitElement {
           placeholder="e.g. {所属} の {氏名} さんから次の通り連絡がありました。"
           size="small"
           resize="none"
+          spellcheck="false"
           @input=${this._handleInputTemplateContents}
         ></sl-textarea>
         <sl-input

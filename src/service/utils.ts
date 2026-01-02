@@ -40,7 +40,7 @@ export function formatDate(
  * @returns {string[]} 重複を除去したパラメータ名の配列。マッチしない場合は空配列を返します。
  */
 export function extractParams(content: string): string[] {
-  const pattern: RegExp = /{[^}]+}/g;
+  const pattern: RegExp = /{{[^}]+}}/g;
   return [...new Set(content.match(pattern) || [])];
 }
 
