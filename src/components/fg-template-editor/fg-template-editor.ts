@@ -96,12 +96,14 @@ export class FgTemplateEditor extends LitElement {
    */
   protected willUpdate(_changedProperties: PropertyValues) {
     this._getCategory();
-    if (
-      _changedProperties.has("templateId") &&
-      this.templateId !== undefined &&
-      this.templateId !== 0
-    ) {
-      this._getTemplate();
+
+    if (_changedProperties.has("templateId")) {
+      if (this.templateId === undefined) return;
+
+      this._init();
+      if (this.templateId !== 0) {
+        this._getTemplate();
+      }
     }
   }
 

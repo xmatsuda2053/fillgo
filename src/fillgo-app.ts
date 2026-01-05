@@ -294,6 +294,7 @@ export class FillGoApp extends LitElement {
    * リストの新規追加画面を表示します。
    */
   private _handleMenuAddClick() {
+    this.templateEditor.templateId = 0;
     this.templateEditor.show();
   }
 
