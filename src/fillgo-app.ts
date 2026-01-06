@@ -135,6 +135,7 @@ export class FillGoApp extends LitElement {
           id: c.id ?? 0,
           name: c.name,
         }));
+        this.mainContents.reload();
       },
       error: (err) => console.error("LiveQuery error:", err),
     });

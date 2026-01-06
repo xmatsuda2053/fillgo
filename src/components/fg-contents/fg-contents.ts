@@ -66,9 +66,18 @@ export class FgContents extends LitElement {
       this.templateId !== undefined &&
       this.templateId !== 0
     ) {
-      await this._getTemplate();
-      this._init();
+      await this.reload();
     }
+  }
+
+  /**
+   * 画面を再描画する
+   *
+   * @memberof FgContents
+   */
+  public async reload() {
+    await this._getTemplate();
+    this._init();
   }
 
   /**
