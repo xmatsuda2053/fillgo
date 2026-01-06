@@ -24,6 +24,7 @@ import type SlInput from "@shoelace-style/shoelace/dist/components/input/input.j
 import type SlTextarea from "@shoelace-style/shoelace/dist/components/textarea/textarea.js";
 import type SlRadioGroup from "@shoelace-style/shoelace/dist/components/radio-group/radio-group.js";
 import type SlButton from "@shoelace-style/shoelace/dist/components/button/button.js";
+import type { SlTab } from "@shoelace-style/shoelace";
 
 import styles from "./fg-template-editor.lit.scss?inline";
 
@@ -41,6 +42,14 @@ export class FgTemplateEditor extends LitElement {
   @property({ type: Number, hasChanged: () => true }) templateId?:
     | number
     | undefined = undefined;
+
+  /**
+   * 最初のタブ
+   *
+   * @type {SlTab}
+   * @memberof FgTemplateEditor
+   */
+  @query("#first-tab") firstTab!: SlTab;
 
   /**
    * テンプレートを編集するための画面要素。
@@ -150,7 +159,7 @@ export class FgTemplateEditor extends LitElement {
       @sl-request-close=${this._handleRequestClose}
     >
       <sl-tab-group id="editor-tab">
-        <sl-tab slot="nav" panel="base">基本情報</sl-tab>
+        <sl-tab slot="nav" panel="base" id="first-tab">基本情報</sl-tab>
         <sl-tab slot="nav" panel="params">パラメタ定義</sl-tab>
         <sl-tab-panel name="base">
           <div id="editor-input-data" class="editor-form">
@@ -338,6 +347,7 @@ export class FgTemplateEditor extends LitElement {
    * @memberof FgTemplateEditor
    */
   private _init(): void {
+    this.firstTab.click();
     this.inputTitle.value = "";
     this.inputContent.value = "";
     this._params = [];
