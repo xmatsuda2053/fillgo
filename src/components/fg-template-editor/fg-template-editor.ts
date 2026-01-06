@@ -203,7 +203,7 @@ export class FgTemplateEditor extends LitElement {
           id="template-content"
           class="label-on-left"
           label="内容"
-          placeholder="e.g. {所属} の {氏名} さんから次の通り連絡がありました。"
+          placeholder="e.g. {{所属}} の {{氏名}} さんから次の通り連絡がありました。"
           size="small"
           resize="none"
           spellcheck="false"
