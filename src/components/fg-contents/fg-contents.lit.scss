@@ -38,9 +38,15 @@
   .result-area {
     grid-area: result-area;
     padding-left: var(--sl-spacing-x-small);
+
     cursor: pointer;
 
     .contents {
+      background-color: var(--sl-color-neutral-0);
+      border: 1px solid var(--sl-color-neutral-200);
+      border-radius: 3px;
+      padding: var(--sl-spacing-2x-small);
+
       #result {
         white-space: pre-wrap;
         font-size: var(--sl-font-size-small);
@@ -55,7 +61,7 @@
     }
 
     &:hover {
-      color: var(--sl-color-primary-800);
+      color: var(--sl-color-primary-600);
     }
   }
 }
