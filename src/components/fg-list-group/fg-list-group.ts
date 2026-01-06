@@ -106,13 +106,13 @@ export class FgListGroup extends LitElement {
       <div class="toolbar">
         <sl-button-group label="file">
           <sl-tooltip content="新規追加" placement="bottom-start">
-            <sl-button size="small" @click=${this._handleAddClick} outline>
+            <sl-button @click=${this._handleAddClick} outline>
               <sl-icon library="fillgo" name="plus-lg" label="add"></sl-icon>
             </sl-button>
           </sl-tooltip>
 
           <sl-dropdown>
-            <sl-button size="small" slot="trigger" outline Caret>
+            <sl-button slot="trigger" outline Caret>
               <sl-icon
                 library="fillgo"
                 name="${this._selectedFilterId === FILTER_ALL
@@ -144,7 +144,6 @@ export class FgListGroup extends LitElement {
 
           <sl-tooltip content="編集" placement="bottom-start">
             <sl-button
-              size="small"
               ?disabled=${!this._selectedId}
               @click=${this._handleEditClick}
               outline
@@ -159,7 +158,6 @@ export class FgListGroup extends LitElement {
 
           <sl-tooltip content="コピー" placement="bottom-start">
             <sl-button
-              size="small"
               ?disabled=${!this._selectedId}
               @click=${this._handleCopyClick}
               outline
@@ -169,7 +167,7 @@ export class FgListGroup extends LitElement {
           </sl-tooltip>
 
           <sl-dropdown>
-            <sl-button size="small" slot="trigger" outline>
+            <sl-button slot="trigger" outline>
               <sl-icon
                 library="fillgo"
                 name="three-dots"

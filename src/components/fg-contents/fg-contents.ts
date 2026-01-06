@@ -128,7 +128,7 @@ export class FgContents extends LitElement {
         <div class="toolbar">
           <sl-button-group label="file">
             <sl-tooltip content="クリア" placement="bottom-start">
-              <sl-button size="small" outline>
+              <sl-button outline>
                 <sl-icon
                   library="fillgo"
                   name="eraser"
@@ -152,7 +152,7 @@ export class FgContents extends LitElement {
               content="クリップボードにコピー"
               placement="bottom-start"
             >
-              <sl-button size="small" outline>
+              <sl-button outline>
                 <sl-icon
                   library="fillgo"
                   name="clipboard"
